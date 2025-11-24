@@ -40,7 +40,7 @@ export const handleLogin = async (req, res, next) => {
           res.cookie("AuthToken", AuthToken, {
             httpOnly: true,
             secure: true,
-            sameSite: "strict",
+            sameSite: "none",
           });
 
           // Sending Final Response
