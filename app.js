@@ -19,10 +19,10 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://backend-9gh6.onrender.com",
+    origin: "frontend-96y7n6nvk-gsss-mirzewalas-projects.vercel.app", // Frontend URL
     credentials: true,
   })
-); // origin = Frontend URL
+);
 dotenv.config();
 
 // Encoding Request Bodies
