@@ -11,7 +11,7 @@ import PasswordValidator from "../../validators/PasswordValidator.js";
 // Creating Router
 const AuthRouter = express.Router();
 
-// Configuring Post Routes
+// POST Requests Handling
 AuthRouter.post("/login", [USTA_PIN_Validator, PasswordValidator], handleLogin);
 
 export default AuthRouter;

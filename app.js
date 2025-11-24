@@ -5,6 +5,11 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
+// Local Modules (Routers)
+import PublicRouter from "./routes/PublicRouter.js";
+import AuthRouter from "./routes/Auth/AuthRouter.js";
+import HelpRouter from "./routes/Help/HelpRouter.js";
+
 // Loading Enviornments
 dotenv.config();
 
@@ -46,9 +51,7 @@ const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 
 // Routers
-import AuthRouter from "./routes/Auth/AuthRouter.js";
-import HelpRouter from "./routes/Help/HelpRouter.js";
-
+app.use("/api/public", PublicRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 
@@ -56,9 +59,9 @@ app.use("/api/help", HelpRouter);
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log(`✔ Connected to MongoDb Successfully!`);
+    console.log(`✔  Connected to MongoDb Successfully!`);
     app.listen(PORT, () => {
-      console.log(`✔ App is Running at http://localhost:${PORT}`);
+      console.log(`✔  App is Running at http://localhost:${PORT}`);
     });
   })
   .catch((err) => {

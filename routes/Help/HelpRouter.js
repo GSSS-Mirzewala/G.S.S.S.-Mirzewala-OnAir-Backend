@@ -6,8 +6,6 @@ import { addToDatabase } from "../../controllers/Help/HelpController.js";
 
 const HelpRouter = express.Router();
 
-// GET Requests Handling
-
 // POST Requests Handling
 HelpRouter.post("/submit", addToDatabase);
 
