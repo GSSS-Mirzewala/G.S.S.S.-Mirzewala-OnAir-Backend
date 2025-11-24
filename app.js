@@ -19,7 +19,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://192.168.31.29:5173"],
+    origin: ["https://backend-9gh6.onrender.com"],
     credentials: true,
   })
 ); // origin = Frontend URL
@@ -27,6 +27,7 @@ dotenv.config();
 
 // Encoding Request Bodies
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // ! Constants
 const PORT = process.env.PORT;
@@ -55,9 +56,6 @@ app.use(
     },
   })
 );
-
-// Making 'public' folder Accessible.
-app.use(express.static("public"));
 
 // Routing
 app.use("/", PublicRouter);
