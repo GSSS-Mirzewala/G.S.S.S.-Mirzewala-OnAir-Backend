@@ -57,7 +57,7 @@ app.use(
   })
 );
 
-// Routing
+// Routers
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 
