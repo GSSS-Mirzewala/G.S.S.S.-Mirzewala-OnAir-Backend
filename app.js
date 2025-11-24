@@ -19,7 +19,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "frontend-96y7n6nvk-gsss-mirzewalas-projects.vercel.app", // Frontend URL
+    origin: "frontend-gules-kappa-68.vercel.app", // Frontend URL
     credentials: true,
   })
 );
