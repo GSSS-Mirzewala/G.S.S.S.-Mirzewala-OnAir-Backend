@@ -58,7 +58,6 @@ app.use(
 );
 
 // Routing
-app.use("/", PublicRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 
