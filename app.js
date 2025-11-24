@@ -19,7 +19,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://frontend-gules-kappa-68.vercel.app", // Frontend URL
+    origin: process.env.FRONTEND_URI, // Frontend URL
     credentials: true,
   })
 );
