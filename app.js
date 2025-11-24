@@ -19,7 +19,7 @@ const app = express();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://backend-9gh6.onrender.com"],
+    origin: "https://backend-9gh6.onrender.com",
     credentials: true,
   })
 ); // origin = Frontend URL
