@@ -5,7 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
-// Load env FIRST (important!!)
+// Loading Enviornments
 dotenv.config();
 
 // Creating 'Express' App
@@ -22,7 +22,19 @@ app.use(
 );
 
 // Handle Preflight Requests
-app.options("*", cors());
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Origin", process.env.FRONTEND_URI);
+    res.header("Access-Control-Allow-Credentials", "true");
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // Middlewares
 app.use(cookieParser());
