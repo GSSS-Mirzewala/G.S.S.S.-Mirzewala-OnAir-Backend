@@ -2,7 +2,7 @@
 import { check } from "express-validator";
 
 const USTA_PIN_Validator = [
-  check("ustaPin")
+  check("data.ustaPin")
     .trim()
     .notEmpty()
     .withMessage("USTA PIN is Required!")

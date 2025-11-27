@@ -10,31 +10,29 @@ export const handleLogin = async (req, res, next) => {
   const Errors = validationResult(req);
 
   if (!Errors.isEmpty()) {
-    console.log("Error Occured!"); // Debug Point - 1
     console.log(Errors.array());
   } else {
-    console.log("Validation Passed Successfully!"); // Debug Point - 2
-    const { ustaPin, password } = req.body;
+    // $1 - Validation Passed Successfully!
+    const { ustaPin, password } = req.body.data;
 
     // Finding User in Database
     const User = await UserModel.findOne({ ustaPin });
     if (!User) {
       throw Error("Invalid Credentials");
     } else {
-      console.log("Verifying..."); // Debug Point - 3
+      // $2 - Verifying...
       const isPasswordMatched = await bcrypt.compare(password, User.password);
       if (!isPasswordMatched) {
         throw Error("Password doesn't match");
       } else {
-        console.log("Password Matched Successfully!"); // Debug Point - 4
+        // $3 - Password Matched Successfully!
         if (User.accountStatus !== "ACTIVE") {
           throw Error(
             "Your Account is Not Active to use. Contact the School Administration for Help."
           );
         } else {
-          console.log("Acc. is Still Active to Use!"); // Debug Point - 5
-          // Generate JWT Token
-          const AuthToken = Create_JWT(User._id);
+          // $4 - Acc. is Still Active to Use!
+          const AuthToken = Create_JWT(User._id); // Generate JWT Token
 
           // Settingup Cookie
           res.cookie("AuthToken", AuthToken, {

@@ -2,7 +2,7 @@
 import { check } from "express-validator";
 
 const PasswordValidator = [
-  check("password")
+  check("data.password")
     .notEmpty()
     .withMessage("Password should not be Empty!")
     .isLength({ min: 8 })

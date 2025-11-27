@@ -1,23 +1,32 @@
 import HelpModel from "../../models/HelpModel.js";
 
 export const addToDatabase = async (req, res) => {
-  const { email, concern } = req.body;
+  const { email, concern } = req.body.data;
   try {
-    const NewHelpRequest = new HelpModel({ email, concern });
-    const isSaved = await NewHelpRequest.save();
-    if (isSaved) {
-      res.status(201).json({
-        requestSubmitted: true,
-        message: "Help Request Submitted Successfully!",
-      });
+    const Requests = await HelpModel.find({ email: email }).select("status");
+    const PendingRequests = Requests.filter(
+      (Request) => Request.status === "PENDING"
+    );
+
+    if (PendingRequests.length >= 3) {
+      throw Error("You have already Reached Your Limits!");
     } else {
-      throw Error("Error while Submitting Help Request!");
+      const NewHelpRequest = new HelpModel({ email, concern });
+      const isSaved = await NewHelpRequest.save();
+      if (isSaved) {
+        res.status(201).json({
+          requestSubmitted: true,
+          message: "Help Request Submitted Successfully!",
+        });
+      } else {
+        throw Error("Error while Submitting Help Request!");
+      }
     }
   } catch (error) {
     console.error("Database Error");
     res.status(500).json({
       requestSubmitted: false,
-      message: `Error Occured: ${error}`,
+      message: `Error Occured: ${error.message}`,
     });
   }
 };
