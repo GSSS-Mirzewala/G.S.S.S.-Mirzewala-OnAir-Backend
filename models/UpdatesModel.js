@@ -9,7 +9,6 @@ const ReleaseNotesModel = mongoose.Schema({
   version: { type: String, unique: true, required: true },
   description: { type: String, required: true },
   fixes: { type: Object, required: true },
-  notifyTill: { type: String, unique: true, required: true }, // YYYYMMDD
 });
 
 export default mongoose.model("Release_Notes", ReleaseNotesModel);
