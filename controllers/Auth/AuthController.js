@@ -12,7 +12,7 @@ export const handleLogin = async (req, res, next) => {
   if (!Errors.isEmpty()) {
     console.log(Errors.array());
   } else {
-    // $1 - Validation Passed Successfully!
+    console.log("Validation Passed Successfully!");
     const { ustaPin, password } = req.body.data;
 
     // Finding User in Database
@@ -20,18 +20,19 @@ export const handleLogin = async (req, res, next) => {
     if (!User) {
       throw Error("Invalid Credentials");
     } else {
-      // $2 - Verifying...
+      console.log("Verifying...");
       const isPasswordMatched = await bcrypt.compare(password, User.password);
       if (!isPasswordMatched) {
         throw Error("Password doesn't match");
       } else {
-        // $3 - Password Matched Successfully!
+        console.log("Password Matched Successfully!");
+
         if (User.accountStatus !== "ACTIVE") {
           throw Error(
             "Your Account is Not Active to use. Contact the School Administration for Help."
           );
         } else {
-          // $4 - Acc. is Still Active to Use!
+          console.log("Acc. is Still Active to Use!");
           const AuthToken = Create_JWT(User._id); // Generate JWT Token
 
           // Settingup Cookie
@@ -52,4 +53,9 @@ export const handleLogin = async (req, res, next) => {
     }
   }
   res.end();
+};
+
+export const identifyMe = async (req, res) => {
+  const UserToken = req.cookies.AuthToken;
+  console.log(UserToken);
 };
