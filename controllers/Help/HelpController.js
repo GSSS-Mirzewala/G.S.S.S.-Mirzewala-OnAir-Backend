@@ -3,8 +3,8 @@ import HelpModel from "../../models/HelpModel.js";
 export const addToDatabase = async (req, res) => {
   const { email, concern } = req.body.data;
   try {
-    const Requests = await HelpModel.find({ email: email }).select("status");
-    const PendingRequests = Requests.filter(
+    const mongodata = await HelpModel.find({ email: email }).select("status");
+    const PendingRequests = mongodata.filter(
       (Request) => Request.status === "PENDING"
     );
 
@@ -12,8 +12,8 @@ export const addToDatabase = async (req, res) => {
       throw Error("You have already Reached Your Limits!");
     } else {
       const NewHelpRequest = new HelpModel({ email, concern });
-      const isSaved = await NewHelpRequest.save();
-      if (isSaved) {
+      const savemongo = await NewHelpRequest.save();
+      if (savemongo) {
         res.status(201).json({
           requestSubmitted: true,
           message: "Help Request Submitted Successfully!",
@@ -23,7 +23,7 @@ export const addToDatabase = async (req, res) => {
       }
     }
   } catch (error) {
-    console.error("Database Error");
+    console.error("Database Error", error);
     res.status(500).json({
       requestSubmitted: false,
       message: `Error Occured: ${error.message}`,

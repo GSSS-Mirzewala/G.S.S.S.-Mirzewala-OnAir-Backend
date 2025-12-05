@@ -16,37 +16,41 @@ export const handleLogin = async (req, res, next) => {
     const { ustaPin, password } = req.body.data;
 
     // Finding User in Database
-    const User = await UserModel.findOne({ ustaPin });
-    if (!User) {
+    const mongodata = await UserModel.findOne({ ustaPin });
+    if (!mongodata) {
       throw Error("Invalid Credentials");
     } else {
       console.log("Verifying...");
-      const isPasswordMatched = await bcrypt.compare(password, User.password);
+      const isPasswordMatched = await bcrypt.compare(
+        password,
+        mongodata.password
+      );
       if (!isPasswordMatched) {
         throw Error("Password doesn't match");
       } else {
         console.log("Password Matched Successfully!");
 
-        if (User.accountStatus !== "ACTIVE") {
+        if (mongodata.accountStatus !== "ACTIVE") {
           throw Error(
             "Your Account is Not Active to use. Contact the School Administration for Help."
           );
         } else {
           console.log("Acc. is Still Active to Use!");
-          const AuthToken = Create_JWT(User._id); // Generate JWT Token
+          const AuthToken = Create_JWT(mongodata._id); // Generate JWT Token
 
           // Settingup Cookie
           res.cookie("AuthToken", AuthToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: true, // True for Production & False for Local Development
+            sameSite: "none", // "none" for Production & "lax" for Local Development
+            path: "/",
           });
 
           // Sending Final Response
           return res.status(200).json({
             loggedIn: true,
             message: "You are Loggedin Successfully!",
-            User,
+            mongodata,
           });
         }
       }
