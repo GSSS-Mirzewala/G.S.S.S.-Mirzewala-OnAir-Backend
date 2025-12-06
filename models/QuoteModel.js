@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const QuoteModel = mongoose.Schema(
+const QuoteSchema = mongoose.Schema(
   {
     quote: { type: String, required: true, unique: true },
     author: { type: String },
@@ -8,4 +8,4 @@ const QuoteModel = mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Quote", QuoteModel);
+export default mongoose.model("Quote", QuoteSchema);

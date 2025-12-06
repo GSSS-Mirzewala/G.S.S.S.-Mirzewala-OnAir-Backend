@@ -1,4 +1,4 @@
-import HelpModel from "../../models/HelpModel.js";
+import HelpModel from "../models/HelpModel.js";
 
 export const addToDatabase = async (req, res) => {
   const { email, concern } = req.body.data;

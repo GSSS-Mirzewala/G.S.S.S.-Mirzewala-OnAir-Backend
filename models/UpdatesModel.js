@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ReleaseNotesModel = mongoose.Schema({
+const ReleaseNoteSchema = mongoose.Schema({
   type: {
     type: String,
     required: true,
@@ -11,4 +11,4 @@ const ReleaseNotesModel = mongoose.Schema({
   fixes: { type: Object, required: true },
 });
 
-export default mongoose.model("Release_Notes", ReleaseNotesModel);
+export default mongoose.model("Release_Note", ReleaseNoteSchema);

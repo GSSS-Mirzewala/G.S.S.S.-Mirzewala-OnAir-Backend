@@ -2,7 +2,7 @@
 import express from "express";
 
 // Local Modules
-import { addToDatabase } from "../../controllers/Help/HelpController.js";
+import { addToDatabase } from "../controllers/HelpController.js";
 
 const HelpRouter = express.Router();
 

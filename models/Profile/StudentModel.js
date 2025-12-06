@@ -2,14 +2,8 @@
 import mongoose from "mongoose";
 
 // Schema Structure
-const StudentModel = mongoose.Schema(
+const StudentSchema = mongoose.Schema(
   {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Member",
-      unique: [true, "ID must be Unique!"],
-      trim: true,
-    },
     class: { type: Number },
     section: { type: String, trim: true },
     rollNumber: { type: Number },
@@ -21,4 +15,4 @@ const StudentModel = mongoose.Schema(
 );
 
 // Creating & Exporting Model of Schema Structure
-export default mongoose.model("Student", StudentModel);
+export default mongoose.model("Student", StudentSchema);

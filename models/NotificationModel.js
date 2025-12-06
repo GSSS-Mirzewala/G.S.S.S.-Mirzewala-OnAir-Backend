@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 // Schema Structure
-const PostModel = mongoose.Schema(
+const PostSchema = mongoose.Schema(
   {
     context: {
       type: String,
@@ -27,4 +27,4 @@ const PostModel = mongoose.Schema(
 );
 
 // Creating & Exporting Model of Schema Structure
-export default mongoose.model("Post", PostModel);
+export default mongoose.model("Post", PostSchema);

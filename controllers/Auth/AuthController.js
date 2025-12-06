@@ -4,7 +4,7 @@ import Create_JWT from "../../utils/Create_JWT.js";
 import { validationResult } from "express-validator";
 
 // Local Modules
-import UserModel from "../../models/UserModel.js";
+import MemberModel from "../../models/MemberModel.js";
 
 export const handleLogin = async (req, res, next) => {
   const Errors = validationResult(req);
@@ -16,7 +16,7 @@ export const handleLogin = async (req, res, next) => {
     const { ustaPin, password } = req.body.data;
 
     // Finding User in Database
-    const mongodata = await UserModel.findOne({ ustaPin });
+    const mongodata = await MemberModel.findOne({ ustaPin });
     if (!mongodata) {
       throw Error("Invalid Credentials");
     } else {

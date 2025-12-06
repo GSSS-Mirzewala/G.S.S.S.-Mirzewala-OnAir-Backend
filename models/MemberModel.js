@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 // Schema Structure
-const UserModel = mongoose.Schema(
+const MemberSchema = mongoose.Schema(
   {
     ustaPin: {
       type: String,
@@ -52,9 +52,14 @@ const UserModel = mongoose.Schema(
     phone: { type: Number },
     address: { type: String },
     photoUrl: { type: String },
+
+    // Referencers
+    studentRef: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
+    teacherRef: { type: mongoose.Schema.Types.ObjectId, ref: "Teacher" },
+    adminRef: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" },
   },
   { timestamps: true }
 );
 
 // Creating & Exporting Model of Schema Structure
-export default mongoose.model("Member", UserModel);
+export default mongoose.model("Member", MemberSchema);

@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 
 // Schema Structure
-const HelpModel = mongoose.Schema(
+const HelpSchema = mongoose.Schema(
   {
     email: { type: String, required: [true, "Email is Required"], trim: true },
     concern: { type: String, required: [true, "Concern is Required!"] },
@@ -19,4 +19,4 @@ const HelpModel = mongoose.Schema(
 );
 
 // Creating & Exporting Model of Schema Structure
-export default mongoose.model("Help", HelpModel);
+export default mongoose.model("Help", HelpSchema);

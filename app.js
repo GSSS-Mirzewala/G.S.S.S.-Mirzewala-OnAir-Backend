@@ -8,7 +8,10 @@ import cookieParser from "cookie-parser";
 // Local Modules (Routers)
 import PublicRouter from "./routes/PublicRouter.js";
 import AuthRouter from "./routes/Auth/AuthRouter.js";
-import HelpRouter from "./routes/Help/HelpRouter.js";
+import HelpRouter from "./routes/HelpRouter.js";
+
+// Profile Routers
+import TeacherRouter from "./routes/Profile/TeacherRouter.js";
 
 // Loading Enviornments
 dotenv.config();
@@ -37,6 +40,7 @@ const MONGO_URI = process.env.MONGO_URI;
 app.use("/api/public", PublicRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
+app.use("/api/tch", TeacherRouter);
 
 // Start Server
 mongoose

@@ -2,14 +2,8 @@
 import mongoose from "mongoose";
 
 // Schema Structure
-const TeacherModel = mongoose.Schema(
+const TeacherSchema = mongoose.Schema(
   {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Member",
-      unique: [true, "ID must be Unique!"],
-      trim: true,
-    },
     status: {
       type: String,
       trim: true,
@@ -28,4 +22,4 @@ const TeacherModel = mongoose.Schema(
 );
 
 // Creating & Exporting Model of Schema Structure
-export default mongoose.model("Teacher", TeacherModel);
+export default mongoose.model("Teacher", TeacherSchema);
