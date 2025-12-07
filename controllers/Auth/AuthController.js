@@ -41,9 +41,11 @@ export const handleLogin = async (req, res, next) => {
 
           // Settingup Cookie
           res.cookie("AuthToken", AuthToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: true, // Cookie only sent on HTTPS
+            sameSite: "none", // Required when frontend & backend have different domains
+            domain: ".gsssmirzewala.in", // Allow cookie across subdomains
+            path: "/", // Allow cookie for all routes
+            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
           });
 
           // Sending Final Response
