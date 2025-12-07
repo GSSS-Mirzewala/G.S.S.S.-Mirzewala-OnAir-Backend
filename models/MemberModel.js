@@ -61,5 +61,11 @@ const MemberSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// Virtuals
+MemberSchema.virtual("age").get(() => {
+  const diff = Date.now - this.dateOfBirth.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+});
+
 // Creating & Exporting Model of Schema Structure
 export default mongoose.model("Member", MemberSchema);

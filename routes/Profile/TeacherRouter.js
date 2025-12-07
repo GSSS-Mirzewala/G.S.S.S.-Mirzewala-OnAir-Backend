@@ -2,7 +2,7 @@
 import express from "express";
 
 // Local Modules
-import { getAllStudents } from "../../controllers/TeacherController.js";
+import { getAllStudents } from "../../controllers/Profile/TeacherController.js";
 
 const TeacherRouter = express.Router();
 
