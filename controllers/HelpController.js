@@ -14,7 +14,7 @@ export const addToDatabase = async (req, res) => {
       const NewHelpRequest = new HelpModel({ email, concern });
       const savemongo = await NewHelpRequest.save();
       if (savemongo) {
-        res.status(201).json({
+        return res.status(201).json({
           requestSubmitted: true,
           message: "Help Request Submitted Successfully!",
         });
@@ -24,7 +24,7 @@ export const addToDatabase = async (req, res) => {
     }
   } catch (error) {
     console.error("Database Error", error);
-    res.status(500).json({
+    return res.status(500).json({
       requestSubmitted: false,
       message: `Error Occured: ${error.message}`,
     });

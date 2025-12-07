@@ -12,7 +12,7 @@ export const getAllStudents = async (req, res) => {
     const mongodata = await MemberModel.find({
       userType: "STD",
       accountStatus: "ACTIVE",
-      studentRef: { $ne: null },
+      studentRef: { $exists: true, $ne: null },
     })
       .populate({
         path: "studentRef",
@@ -21,7 +21,12 @@ export const getAllStudents = async (req, res) => {
       })
       .select("ustaPin name photoUrl -_id")
       .lean();
-    res.status(200).json(...mongodata);
+    if (mongodata.length !== 0) {
+      const filtered = mongodata.filter((item) => item.studentRef !== null);
+      return res.status(200).json({ mongodata: filtered });
+    } else {
+      return res.status(404).json({ message: "Data not Found!" });
+    }
   } catch (error) {
     throw new Error(error);
   }

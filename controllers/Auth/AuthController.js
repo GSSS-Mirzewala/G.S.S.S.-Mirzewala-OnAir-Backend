@@ -1,6 +1,7 @@
 // External Modules
 import bcrypt from "bcryptjs";
-import Create_JWT from "../../utils/Create_JWT.js";
+import CreateAuthToken from "../../utils/CreateAuthToken.js";
+import VerifyAuthToken from "../../utils/VerifyAuthToken.js";
 import { validationResult } from "express-validator";
 
 // Local Modules
@@ -36,14 +37,13 @@ export const handleLogin = async (req, res, next) => {
           );
         } else {
           console.log("Acc. is Still Active to Use!");
-          const AuthToken = Create_JWT(mongodata._id); // Generate JWT Token
+          const AuthToken = CreateAuthToken(mongodata._id); // Generate JWT Token
 
           // Settingup Cookie
           res.cookie("AuthToken", AuthToken, {
             httpOnly: true,
-            secure: true, // True for Production & False for Local Development
-            sameSite: "none", // "none" for Production & "lax" for Local Development
-            path: "/",
+            secure: true,
+            sameSite: "none",
           });
 
           // Sending Final Response
@@ -56,10 +56,27 @@ export const handleLogin = async (req, res, next) => {
       }
     }
   }
-  res.end();
+  return res.end();
 };
 
 export const identifyMe = async (req, res) => {
   const UserToken = req.cookies.AuthToken;
-  console.log(UserToken);
+  if (!UserToken) {
+    return res.status(401).json({
+      loggedIn: false,
+      message: "No token found",
+    });
+  } else {
+    if (!VerifyAuthToken(UserToken)) {
+      return res.status(200).json({
+        loggedIn: false,
+        message: "Invalid Json Web Token!",
+      });
+    } else {
+      return res.status(200).json({
+        loggedIn: true,
+        message: "Token Found!",
+      });
+    }
+  }
 };

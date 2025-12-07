@@ -22,7 +22,7 @@ const app = express();
 // CORS Configuration
 app.use(
   cors({
-    origin: process.env.FRONTEND_URI, // MUST be loaded from .env
+    origin: process.env.FRONTEND_URI,
     credentials: true,
   })
 );
