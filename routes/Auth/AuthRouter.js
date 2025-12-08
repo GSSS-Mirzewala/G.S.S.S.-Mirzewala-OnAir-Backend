@@ -4,6 +4,7 @@ import express from "express";
 // Controllers
 import {
   handleLogin,
+  handleLogout,
   identifyMe,
 } from "../../controllers/Auth/AuthController.js";
 
@@ -16,6 +17,7 @@ const AuthRouter = express.Router();
 
 // GET Requests Handling
 AuthRouter.get("/me", identifyMe);
+AuthRouter.get("/logout", handleLogout);
 
 // POST Requests Handling
 AuthRouter.post("/login", [USTA_PIN_Validator, PasswordValidator], handleLogin);

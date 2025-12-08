@@ -46,10 +46,7 @@ app.use("/api/tch", TeacherRouter);
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log(`✔  Connected to MongoDb Successfully!`);
-    app.listen(PORT, () => {
-      console.log(`✔  App is Running at http://localhost:${PORT}`);
-    });
+    app.listen(PORT);
   })
   .catch((err) => {
     console.log(`❌ Error Occured While Connecting to MongoDb: ${err}`);

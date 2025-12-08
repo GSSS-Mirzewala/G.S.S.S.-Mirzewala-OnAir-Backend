@@ -41,6 +41,7 @@ export const handleLogin = async (req, res, next) => {
 
           // Settingup Cookie
           res.cookie("AuthToken", AuthToken, {
+            httpOnly: true,
             secure: true, // Cookie only sent on HTTPS
             sameSite: "none", // Required when frontend & backend have different domains
             domain: ".gsssmirzewala.in", // Allow cookie across subdomains
@@ -61,6 +62,19 @@ export const handleLogin = async (req, res, next) => {
   return res.end();
 };
 
+export const handleLogout = async (req, res) => {
+  res.clearCookie("AuthToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+  });
+
+  return res
+    .status(200)
+    .json({ success: true, message: "Logged out successfully" });
+};
+
 export const identifyMe = async (req, res) => {
   const UserToken = req.cookies.AuthToken;
   if (!UserToken) {
@@ -69,16 +83,39 @@ export const identifyMe = async (req, res) => {
       message: "No token found",
     });
   } else {
-    if (!VerifyAuthToken(UserToken)) {
+    const decoded = VerifyAuthToken(UserToken);
+    if (!decoded) {
       return res.status(200).json({
         loggedIn: false,
         message: "Invalid Json Web Token!",
       });
     } else {
-      return res.status(200).json({
-        loggedIn: true,
-        message: "Token Found!",
-      });
+      try {
+        let mongodata = await MemberModel.findById(decoded.id)
+          .select("userType -_id")
+          .lean();
+
+        if (mongodata.userType === "STD") {
+          mongodata = await MemberModel.findById(decoded.id)
+            .select("-_id -password -adminRef -teacherRef")
+            .populate("studentRef", "-_id");
+        } else if (mongodata.userType === "TCH") {
+          mongodata = await MemberModel.findById(decoded.id)
+            .select("-_id -password -studentRef -adminRef")
+            .populate("teacherRef", "-_id");
+        } else if (mongodata.userType === "ADM") {
+          mongodata = await MemberModel.findById(decoded.id)
+            .select("-_id -password -adminRef -studentRef")
+            .populate("adminRef", "-_id");
+        }
+
+        return res.status(200).json({
+          loggedIn: true,
+          message: "Token Found!",
+        });
+      } catch (error) {
+        throw new Error(error);
+      }
     }
   }
 };
