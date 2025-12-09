@@ -15,7 +15,7 @@ export const addToDatabase = async (req, res) => {
       const savemongo = await NewHelpRequest.save();
       if (savemongo) {
         return res.status(201).json({
-          requestSubmitted: true,
+          success: true,
           message: "Help Request Submitted Successfully!",
         });
       } else {
@@ -25,7 +25,7 @@ export const addToDatabase = async (req, res) => {
   } catch (error) {
     console.error("Database Error", error);
     return res.status(500).json({
-      requestSubmitted: false,
+      success: false,
       message: `Error Occured: ${error.message}`,
     });
   }

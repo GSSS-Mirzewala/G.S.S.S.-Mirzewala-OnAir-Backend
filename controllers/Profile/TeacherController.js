@@ -23,9 +23,11 @@ export const getAllStudents = async (req, res) => {
       .lean();
     if (mongodata.length !== 0) {
       const filtered = mongodata.filter((item) => item.studentRef !== null);
-      return res.status(200).json({ mongodata: filtered });
+      return res.status(200).json({ success: true, mongodata: filtered });
     } else {
-      return res.status(404).json({ message: "Data not Found!" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not Found!" });
     }
   } catch (error) {
     throw new Error(error);

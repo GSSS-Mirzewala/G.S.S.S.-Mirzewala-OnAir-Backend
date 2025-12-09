@@ -8,7 +8,7 @@ const AdminSchema = mongoose.Schema(
       type: String,
       enum: {
         values: ["ACTIVE", "ON_LEAVE", "RETIRED"],
-        message: "Invalid Status Type!",
+        message: "Invalid Admin Status Type!",
       },
       trim: true,
     },

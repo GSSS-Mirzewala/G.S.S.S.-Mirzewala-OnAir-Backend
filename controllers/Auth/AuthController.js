@@ -51,7 +51,7 @@ export const handleLogin = async (req, res, next) => {
 
           // Sending Final Response
           return res.status(200).json({
-            loggedIn: true,
+            success: true,
             message: "You are Loggedin Successfully!",
             mongodata,
           });
@@ -79,14 +79,14 @@ export const identifyMe = async (req, res) => {
   const UserToken = req.cookies.AuthToken;
   if (!UserToken) {
     return res.status(401).json({
-      loggedIn: false,
+      success: false,
       message: "No token found",
     });
   } else {
     const decoded = VerifyAuthToken(UserToken);
     if (!decoded) {
       return res.status(200).json({
-        loggedIn: false,
+        success: false,
         message: "Invalid Json Web Token!",
       });
     } else {
@@ -110,7 +110,8 @@ export const identifyMe = async (req, res) => {
         }
 
         return res.status(200).json({
-          loggedIn: true,
+          mongodata,
+          success: true,
           message: "Token Found!",
         });
       } catch (error) {
