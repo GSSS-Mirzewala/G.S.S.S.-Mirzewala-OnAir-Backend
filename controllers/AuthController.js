@@ -1,11 +1,11 @@
 // External Modules
 import bcrypt from "bcryptjs";
-import CreateAuthToken from "../../utils/CreateAuthToken.js";
-import VerifyAuthToken from "../../utils/VerifyAuthToken.js";
+import CreateAuthToken from "../utils/CreateAuthToken.js";
+import VerifyAuthToken from "../utils/VerifyAuthToken.js";
 import { validationResult } from "express-validator";
 
 // Local Modules
-import MemberModel from "../../models/MemberModel.js";
+import MemberModel from "../models/MemberModel.js";
 
 export const handleLogin = async (req, res, next) => {
   const Errors = validationResult(req);
@@ -46,7 +46,6 @@ export const handleLogin = async (req, res, next) => {
             sameSite: "none", // Required when frontend & backend have different domains
             domain: ".gsssmirzewala.in", // Allow cookie across subdomains
             path: "/", // Allow cookie for all routes
-            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
           });
 
           // Sending Final Response

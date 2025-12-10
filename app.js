@@ -7,11 +7,11 @@ import cookieParser from "cookie-parser";
 
 // Local Modules (Routers)
 import PublicRouter from "./routes/PublicRouter.js";
-import AuthRouter from "./routes/Auth/AuthRouter.js";
+import AuthRouter from "./routes/AuthRouter.js";
 import HelpRouter from "./routes/HelpRouter.js";
 
-// Profile Routers
-import TeacherRouter from "./routes/Profile/TeacherRouter.js";
+// Profile Based Routers
+import TeacherRouter from "./routes/profile/TeacherRouter.js";
 
 // Loading Enviornments
 dotenv.config();

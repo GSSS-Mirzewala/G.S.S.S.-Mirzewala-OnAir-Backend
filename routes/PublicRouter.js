@@ -2,9 +2,9 @@
 import express from "express";
 
 // Local Modules
-import { fetchQuote } from "../controllers/Public/QuoteController.js";
-import { fetchAllUpdates } from "../controllers/Public/UpdatesController.js";
-import { fetchLatestUpdate } from "../controllers/Public/UpdatesController.js";
+import { fetchQuote } from "../controllers/public/QuoteController.js";
+import { fetchAllUpdates } from "../controllers/public/UpdatesController.js";
+import { fetchLatestUpdate } from "../controllers/public/UpdatesController.js";
 
 const PublicRouter = express.Router();
 

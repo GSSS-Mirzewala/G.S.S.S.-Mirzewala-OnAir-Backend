@@ -6,11 +6,11 @@ import {
   handleLogin,
   handleLogout,
   identifyMe,
-} from "../../controllers/Auth/AuthController.js";
+} from "../controllers/AuthController.js";
 
 // Validators
-import USTA_PIN_Validator from "../../validators/USTA_PIN_Validator.js";
-import PasswordValidator from "../../validators/PasswordValidator.js";
+import USTA_PIN_Validator from "../validators/USTA_PIN_Validator.js";
+import PasswordValidator from "../validators/PasswordValidator.js";
 
 // Creating Router
 const AuthRouter = express.Router();
