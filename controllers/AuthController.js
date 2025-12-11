@@ -44,7 +44,6 @@ export const handleLogin = async (req, res, next) => {
             httpOnly: true,
             secure: true, // Cookie only sent on HTTPS
             sameSite: "none", // Required when frontend & backend have different domains
-            domain: ".gsssmirzewala.in", // Allow cookie across subdomains
             path: "/", // Allow cookie for all routes
           });
 
