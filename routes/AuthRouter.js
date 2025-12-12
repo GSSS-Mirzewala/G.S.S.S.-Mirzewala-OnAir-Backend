@@ -17,9 +17,9 @@ const AuthRouter = express.Router();
 
 // GET Requests Handling
 AuthRouter.get("/me", identifyMe);
-AuthRouter.get("/logout", handleLogout);
 
 // POST Requests Handling
+AuthRouter.post("/logout", handleLogout);
 AuthRouter.post("/login", [USTA_PIN_Validator, PasswordValidator], handleLogin);
 
 export default AuthRouter;
