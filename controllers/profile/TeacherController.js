@@ -1,9 +1,9 @@
 import MemberModel from "../../models/MemberModel.js";
 
 // Models
-import "../../models/Profile/StudentModel.js";
-import "../../models/Profile/TeacherModel.js";
-import "../../models/Profile/AdminModel.js";
+import "../../models/profile/StudentModel.js";
+import "../../models/profile/TeacherModel.js";
+import "../../models/profile/AdminModel.js";
 
 export const getAllStudents = async (req, res) => {
   const { class: className } = req.params;
