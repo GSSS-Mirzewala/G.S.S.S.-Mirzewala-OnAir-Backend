@@ -1,7 +1,6 @@
 // External Modules
 import bcrypt from "bcryptjs";
-import CreateAuthToken from "../utils/CreateAuthToken.js";
-import VerifyAuthToken from "../utils/VerifyAuthToken.js";
+import { create, verify } from "../utils/JWT.js";
 import { validationResult } from "express-validator";
 
 // Local Modules
@@ -37,7 +36,7 @@ export const handleLogin = async (req, res, next) => {
           );
         } else {
           console.log("Acc. is Still Active to Use!");
-          const AuthToken = CreateAuthToken(mongodata._id); // Generate JWT Token
+          const AuthToken = create(mongodata._id); // Generate JWT Token
 
           // Settingup Cookie
           res.cookie("AuthToken", AuthToken, {
@@ -45,6 +44,7 @@ export const handleLogin = async (req, res, next) => {
             secure: true, // Cookie only sent on HTTPS
             sameSite: "none", // Required when frontend & backend have different domains
             path: "/", // Allow cookie for all routes
+            maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Days
           });
 
           // Sending Final Response
@@ -81,7 +81,7 @@ export const identifyMe = async (req, res) => {
       message: "No token found",
     });
   } else {
-    const decoded = VerifyAuthToken(UserToken);
+    const decoded = verify(UserToken);
     if (!decoded) {
       return res.status(200).json({
         success: false,

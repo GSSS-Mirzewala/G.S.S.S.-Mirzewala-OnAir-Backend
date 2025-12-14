@@ -17,7 +17,7 @@ const MemberSchema = mongoose.Schema(
         "USTA PIN Should be in a Fixed Pattern!",
       ],
     },
-    password: { type: String, required: [true, "Password is Required!"] },
+    password: { type: String, required: true, select: false },
     userType: {
       type: String,
       trim: true,
@@ -53,7 +53,7 @@ const MemberSchema = mongoose.Schema(
     address: { type: String },
     photoUrl: { type: String },
 
-    // Referencers
+    // References
     studentRef: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
     teacherRef: { type: mongoose.Schema.Types.ObjectId, ref: "Teacher" },
     adminRef: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" },
