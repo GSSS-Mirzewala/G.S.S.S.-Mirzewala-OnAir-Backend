@@ -13,6 +13,7 @@ const MarkerSchema = mongoose.Schema(
       type: String,
       trim: true,
       required: true,
+      default: "NOT_ALLOCATED",
       enum: ["ABSENT", "PRESENT", "NOT_ALLOCATED"],
     },
   },

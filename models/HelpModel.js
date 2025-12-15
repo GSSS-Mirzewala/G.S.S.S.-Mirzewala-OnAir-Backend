@@ -4,15 +4,15 @@ import mongoose from "mongoose";
 // Schema Structure
 const HelpSchema = mongoose.Schema(
   {
-    email: { type: String, required: [true, "Email is Required"], trim: true },
-    concern: { type: String, required: [true, "Concern is Required!"] },
+    email: { type: String, required: true, trim: true },
+    concern: { type: String, required: true },
     status: {
       type: String,
-      default: "PENDING",
       enum: {
         values: ["PENDING", "RESOLVED"],
         message: "Invalid Status Type!",
       },
+      default: "PENDING",
     },
   },
   { timestamps: true }

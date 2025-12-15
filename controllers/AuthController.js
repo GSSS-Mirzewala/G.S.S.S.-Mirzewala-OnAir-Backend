@@ -1,9 +1,9 @@
 // External Modules
 import bcrypt from "bcryptjs";
-import { create, verify } from "../utils/JWT.js";
 import { validationResult } from "express-validator";
 
 // Local Modules
+import { create, verify } from "../utils/JWT.js";
 import MemberModel from "../models/MemberModel.js";
 
 export const handleLogin = async (req, res, next) => {
@@ -16,7 +16,7 @@ export const handleLogin = async (req, res, next) => {
     const { ustaPin, password } = req.body.data;
 
     // Finding User in Database
-    const mongodata = await MemberModel.findOne({ ustaPin });
+    const mongodata = await MemberModel.findOne({ ustaPin }).select("+password");
     if (!mongodata) {
       throw Error("Invalid Credentials");
     } else {
@@ -95,15 +95,15 @@ export const identifyMe = async (req, res) => {
 
         if (mongodata.userType === "STD") {
           mongodata = await MemberModel.findById(decoded.id)
-            .select("-_id -password -adminRef -teacherRef")
+            .select("-_id -adminRef -teacherRef")
             .populate("studentRef", "-_id");
         } else if (mongodata.userType === "TCH") {
           mongodata = await MemberModel.findById(decoded.id)
-            .select("-_id -password -studentRef -adminRef")
+            .select("-_id -studentRef -adminRef")
             .populate("teacherRef", "-_id");
         } else if (mongodata.userType === "ADM") {
           mongodata = await MemberModel.findById(decoded.id)
-            .select("-_id -password -adminRef -studentRef")
+            .select("-_id -adminRef -studentRef")
             .populate("adminRef", "-_id");
         }
 
