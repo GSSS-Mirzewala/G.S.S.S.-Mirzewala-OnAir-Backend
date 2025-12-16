@@ -1,32 +1,25 @@
+// Local Modules
 import HelpModel from "../models/HelpModel.js";
+import ServerError from "../utils/ServerErrors.js";
+import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 
-export const addToDatabase = async (req, res) => {
+export const addToDatabase = AsyncErrorsHandler(async (req, res, next) => {
   const { email, concern } = req.body.data;
-  try {
-    const mongodata = await HelpModel.find({ email: email }).select("status");
-    const PendingRequests = mongodata.filter(
-      (Request) => Request.status === "PENDING"
-    );
+  const mongodata = await HelpModel.countDocuments({
+    email: email,
+    status: "PENDING",
+  }).select("status");
 
-    if (PendingRequests.length >= 3) {
-      throw Error("You have already Reached Your Limits!");
-    } else {
-      const NewHelpRequest = new HelpModel({ email, concern });
-      const savemongo = await NewHelpRequest.save();
-      if (savemongo) {
-        return res.status(201).json({
-          success: true,
-          message: "Help Request Submitted Successfully!",
-        });
-      } else {
-        throw Error("Error while Submitting Help Request!");
-      }
-    }
-  } catch (error) {
-    console.error("Database Error", error);
-    return res.status(500).json({
-      success: false,
-      message: `Error Occured: ${error.message}`,
-    });
+  if (mongodata >= 3) {
+    return next(new ServerError("You have Reached Your Limits!", 429));
   }
-};
+
+  // If Limits are not Exceeded
+  await HelpModel.create({ email, concern });
+
+  res.status(201).json({
+    success: true,
+    message:
+      '"Your help request has been submitted! We\'ll get back to you soon!"',
+  });
+});

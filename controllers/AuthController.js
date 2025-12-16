@@ -1,64 +1,61 @@
 // External Modules
-import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
 
 // Local Modules
 import { create, verify } from "../utils/JWT.js";
+import { compare } from "../utils/Hash.js";
+import ServerError from "../utils/ServerErrors.js";
+import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
 
-export const handleLogin = async (req, res, next) => {
+export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   const Errors = validationResult(req);
 
   if (!Errors.isEmpty()) {
-    console.log(Errors.array());
+    return next(new ServerError(Errors.array()[0].msg, 400));
   } else {
-    console.log("Validation Passed Successfully!");
     const { ustaPin, password } = req.body.data;
 
     // Finding User in Database
-    const mongodata = await MemberModel.findOne({ ustaPin }).select("+password");
+    let mongodata = await MemberModel.findOne({ ustaPin }).select("+password");
     if (!mongodata) {
-      throw Error("Invalid Credentials");
+      return next(new ServerError("Account Doesn't Exist!", 404));
     } else {
-      console.log("Verifying...");
-      const isPasswordMatched = await bcrypt.compare(
-        password,
-        mongodata.password
-      );
+      const isPasswordMatched = compare(password, mongodata.password);
       if (!isPasswordMatched) {
-        throw Error("Password doesn't match");
+        return next(new ServerError("Incorrect Password!", 401));
       } else {
-        console.log("Password Matched Successfully!");
-
         if (mongodata.accountStatus !== "ACTIVE") {
-          throw Error(
-            "Your Account is Not Active to use. Contact the School Administration for Help."
+          return next(
+            new ServerError(
+              "Your Account is Not Active to use. Contact the School Administration for Help.",
+              403
+            )
           );
         } else {
-          console.log("Acc. is Still Active to Use!");
-          const AuthToken = create(mongodata._id); // Generate JWT Token
+          const NewAuthToken = create(mongodata._id);
 
-          // Settingup Cookie
-          res.cookie("AuthToken", AuthToken, {
+          // Link Authentication Token
+          res.cookie("AuthToken", NewAuthToken, {
             httpOnly: true,
             secure: true, // Cookie only sent on HTTPS
             sameSite: "none", // Required when frontend & backend have different domains
-            path: "/", // Allow cookie for all routes
+            path: "/",
             maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Days
           });
 
           // Sending Final Response
+          const User = mongodata.toObject();
+          delete User.password;
           return res.status(200).json({
             success: true,
-            message: "You are Loggedin Successfully!",
-            mongodata,
+            mongodata: User,
           });
         }
       }
     }
   }
-  return res.end();
-};
+});
 
 export const handleLogout = async (req, res) => {
   res.clearCookie("AuthToken", {
@@ -73,48 +70,41 @@ export const handleLogout = async (req, res) => {
     .json({ success: true, message: "Logged out successfully" });
 };
 
-export const identifyMe = async (req, res) => {
+export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
   const UserToken = req.cookies.AuthToken;
   if (!UserToken) {
-    return res.status(401).json({
-      success: false,
-      message: "No token found",
-    });
+    return next(new ServerError("You are not LoggedIn", 401));
   } else {
     const decoded = verify(UserToken);
     if (!decoded) {
-      return res.status(200).json({
-        success: false,
-        message: "Invalid Json Web Token!",
-      });
+      return next(new ServerError("You are not LoggedIn", 401));
     } else {
-      try {
-        let mongodata = await MemberModel.findById(decoded.id)
-          .select("userType -_id")
-          .lean();
+      let mongodata = await MemberModel.findById(decoded.id)
+        .select("userType -_id")
+        .lean();
 
-        if (mongodata.userType === "STD") {
-          mongodata = await MemberModel.findById(decoded.id)
-            .select("-_id -adminRef -teacherRef")
-            .populate("studentRef", "-_id");
-        } else if (mongodata.userType === "TCH") {
-          mongodata = await MemberModel.findById(decoded.id)
-            .select("-_id -studentRef -adminRef")
-            .populate("teacherRef", "-_id");
-        } else if (mongodata.userType === "ADM") {
-          mongodata = await MemberModel.findById(decoded.id)
-            .select("-_id -adminRef -studentRef")
-            .populate("adminRef", "-_id");
-        }
+      if (mongodata.userType === "STD") {
+        mongodata = await MemberModel.findById(decoded.id)
+          .select("-_id -adminRef -teacherRef")
+          .populate("studentRef", "-_id");
+      } else if (mongodata.userType === "TCH") {
+        mongodata = await MemberModel.findById(decoded.id)
+          .select("-_id -studentRef -adminRef")
+          .populate("teacherRef", "-_id");
+      } else if (mongodata.userType === "ADM") {
+        mongodata = await MemberModel.findById(decoded.id)
+          .select("-_id -adminRef -studentRef")
+          .populate("adminRef", "-_id");
+      }
 
+      if (!mongodata) {
+        return next(new ServerError("Something went wrong!", 500));
+      } else {
         return res.status(200).json({
           mongodata,
           success: true,
-          message: "Token Found!",
         });
-      } catch (error) {
-        throw new Error(error);
       }
     }
   }
-};
+});

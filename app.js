@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import PublicRouter from "./routes/PublicRouter.js";
 import AuthRouter from "./routes/AuthRouter.js";
 import HelpRouter from "./routes/HelpRouter.js";
+import ErrorsHandler from "./middlewares/ServerErrors.js";
 
 // Profile Based Routers
 import TeacherRouter from "./routes/profile/TeacherRouter.js";
@@ -42,13 +43,15 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 app.use("/api/tch", TeacherRouter);
 
+app.use(ErrorsHandler);
+
 // Start Server
 mongoose
   .connect(MONGO_URI)
   .then(() => {
-    console.log("✔  Connected to MongoDb Successfully!")
+    console.log("✔  Connected to MongoDb Successfully!");
     app.listen(PORT, () => {
-      console.log(`✔  App is Running at localhost:${PORT}!`)
+      console.log(`✔  App is Running at localhost:${PORT}!`);
     });
   })
   .catch((err) => {
