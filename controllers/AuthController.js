@@ -2,7 +2,7 @@
 import { validationResult } from "express-validator";
 
 // Local Modules
-import { create, verify } from "../utils/JWT.js";
+import { create, createAndLink, verify } from "../utils/JWT.js";
 import { compare } from "../utils/Hash.js";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
@@ -34,15 +34,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
           );
         } else {
           const NewAuthToken = create(mongodata._id);
-
-          // Link Authentication Token
-          res.cookie("AuthToken", NewAuthToken, {
-            httpOnly: true,
-            secure: true, // Cookie only sent on HTTPS
-            sameSite: "none", // Required when frontend & backend have different domains
-            path: "/",
-            maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Days
-          });
+          createAndLink(NewAuthToken);
 
           // Sending Final Response
           const User = mongodata.toObject();
@@ -71,40 +63,31 @@ export const handleLogout = async (req, res) => {
 };
 
 export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
-  const UserToken = req.cookies.AuthToken;
-  if (!UserToken) {
-    return next(new ServerError("You are not LoggedIn", 401));
+  const decoded = verify(req.cookie.AuthToken);
+  let mongodata = await MemberModel.findById(decoded.id)
+    .select("userType -_id")
+    .lean();
+
+  if (mongodata.userType === "STD") {
+    mongodata = await MemberModel.findById(decoded.id)
+      .select("-_id -adminRef -teacherRef")
+      .populate("studentRef", "-_id");
+  } else if (mongodata.userType === "TCH") {
+    mongodata = await MemberModel.findById(decoded.id)
+      .select("-_id -studentRef -adminRef")
+      .populate("teacherRef", "-_id");
+  } else if (mongodata.userType === "ADM") {
+    mongodata = await MemberModel.findById(decoded.id)
+      .select("-_id -adminRef -studentRef")
+      .populate("adminRef", "-_id");
+  }
+
+  if (!mongodata) {
+    return next(new ServerError("Something went wrong!", 500));
   } else {
-    const decoded = verify(UserToken);
-    if (!decoded) {
-      return next(new ServerError("You are not LoggedIn", 401));
-    } else {
-      let mongodata = await MemberModel.findById(decoded.id)
-        .select("userType -_id")
-        .lean();
-
-      if (mongodata.userType === "STD") {
-        mongodata = await MemberModel.findById(decoded.id)
-          .select("-_id -adminRef -teacherRef")
-          .populate("studentRef", "-_id");
-      } else if (mongodata.userType === "TCH") {
-        mongodata = await MemberModel.findById(decoded.id)
-          .select("-_id -studentRef -adminRef")
-          .populate("teacherRef", "-_id");
-      } else if (mongodata.userType === "ADM") {
-        mongodata = await MemberModel.findById(decoded.id)
-          .select("-_id -adminRef -studentRef")
-          .populate("adminRef", "-_id");
-      }
-
-      if (!mongodata) {
-        return next(new ServerError("Something went wrong!", 500));
-      } else {
-        return res.status(200).json({
-          mongodata,
-          success: true,
-        });
-      }
-    }
+    return res.status(200).json({
+      mongodata,
+      success: true,
+    });
   }
 });
