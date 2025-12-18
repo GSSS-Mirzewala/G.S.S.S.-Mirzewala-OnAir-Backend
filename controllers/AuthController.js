@@ -2,7 +2,7 @@
 import { validationResult } from "express-validator";
 
 // Local Modules
-import { create, createAndLink, verify } from "../utils/JWT.js";
+import { create, verify } from "../utils/JWT.js";
 import { compare } from "../utils/Hash.js";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
@@ -34,7 +34,14 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
           );
         } else {
           const NewAuthToken = create(mongodata._id);
-          createAndLink(NewAuthToken);
+
+          res.cookie("AuthToken", NewAuthToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            path: "/",
+            maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Days
+          });
 
           // Sending Final Response
           const User = mongodata.toObject();
@@ -63,7 +70,7 @@ export const handleLogout = async (req, res) => {
 };
 
 export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
-  const decoded = verify(req.cookie.AuthToken);
+  const decoded = verify(req.cookies.AuthToken);
   let mongodata = await MemberModel.findById(decoded.id)
     .select("userType -_id")
     .lean();

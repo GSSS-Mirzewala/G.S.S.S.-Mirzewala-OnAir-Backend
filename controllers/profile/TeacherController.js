@@ -1,3 +1,4 @@
+// Local Modules
 import MemberModel from "../../models/MemberModel.js";
 
 // Models
@@ -19,7 +20,7 @@ export const getAllStudents = async (req, res) => {
         match: { class: className },
         select: "fatherName -_id",
       })
-      .select("ustaPin name photoUrl -_id")
+      .select("ustaPin name photoUrl")
       .lean();
     if (mongodata.length !== 0) {
       const filtered = mongodata.filter((item) => item.studentRef !== null);
