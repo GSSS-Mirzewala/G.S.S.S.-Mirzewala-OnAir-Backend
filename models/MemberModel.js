@@ -21,7 +21,7 @@ const MemberSchema = mongoose.Schema(
     userType: {
       type: String,
       trim: true,
-      enum: ["STD", "TCH", "ADM"],
+      enum: ["Student", "Teacher", "Admin"],
     },
     accountStatus: {
       type: String,
@@ -47,27 +47,14 @@ const MemberSchema = mongoose.Schema(
     phone: { type: Number },
     address: { type: String },
     photoUrl: { type: String },
-    modelRef: {
-      type: String,
-      enum: ["Student", "Teacher", "Admin"],
-      required: true,
-      select: false,
-    },
-    ref: {
+    reference: {
       type: mongoose.Schema.Types.ObjectId,
-      refPath: "modelRef",
+      refPath: "userType",
       required: true,
     },
   },
   { timestamps: true }
 );
-
-MemberSchema.pre("validate", function (next) {
-  if (this.userType === "STD") this.modelRef = "Student";
-  if (this.userType === "TCH") this.modelRef = "Teacher";
-  if (this.userType === "ADM") this.modelRef = "Admin";
-  next();
-});
 
 // Virtuals
 MemberSchema.virtual("age").get(function () {
