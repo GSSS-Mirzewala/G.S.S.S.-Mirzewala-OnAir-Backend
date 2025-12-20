@@ -21,19 +21,13 @@ const MemberSchema = mongoose.Schema(
     userType: {
       type: String,
       trim: true,
-      enum: {
-        values: ["STD", "TCH", "ADM"],
-        message: "Invalid UserType Selected!",
-      },
+      enum: ["STD", "TCH", "ADM"],
     },
     accountStatus: {
       type: String,
       trim: true,
-      enum: {
-        values: ["ACTIVE", "BLOCKED", "FORCE_SUSPENDED", "UPGRADED"],
-        message: "Invalid Account Status!",
-      }, // FORCE_SUSPENDED = Acc. Suspended by School. UPGRADED = Acc. Upgraded to 'Alumni' by School Association.
-      default: "ACTIVE"
+      enum: ["ACTIVE", "BLOCKED", "FORCE_SUSPENDED", "UPGRADED"], // FORCE_SUSPENDED = Acc. Suspended by School. UPGRADED = Acc. Upgraded to 'Alumni' by School Association.
+      default: "ACTIVE",
     },
     name: { type: String, required: true, trim: true },
     gender: {
@@ -48,27 +42,40 @@ const MemberSchema = mongoose.Schema(
     email: {
       type: String,
       trim: true,
-      lowercase: [true, "Email should always in be in Lowercase Characters!"],
+      lowercase: true,
     },
     phone: { type: Number },
     address: { type: String },
     photoUrl: { type: String },
-
-    // References
-    studentRef: { type: mongoose.Schema.Types.ObjectId, ref: "Student" },
-    teacherRef: { type: mongoose.Schema.Types.ObjectId, ref: "Teacher" },
-    adminRef: { type: mongoose.Schema.Types.ObjectId, ref: "Admin" },
+    modelRef: {
+      type: String,
+      enum: ["Student", "Teacher", "Admin"],
+      required: true,
+      select: false,
+    },
+    ref: {
+      type: mongoose.Schema.Types.ObjectId,
+      refPath: "modelRef",
+      required: true,
+    },
   },
   { timestamps: true }
 );
 
+MemberSchema.pre("validate", function (next) {
+  if (this.userType === "STD") this.modelRef = "Student";
+  if (this.userType === "TCH") this.modelRef = "Teacher";
+  if (this.userType === "ADM") this.modelRef = "Admin";
+  next();
+});
+
 // Virtuals
-MemberSchema.virtual("age").get(() => {
-  const diff = Date.now - this.dateOfBirth.getTime();
+MemberSchema.virtual("age").get(function () {
+  const diff = Date.now() - this.dateOfBirth.getTime();
   return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
 });
 
-MemberSchema.index({ userType: 1 });
+MemberSchema.index({ userType: 1, accountStatus: 1 });
 
 // Creating & Exporting Model of Schema Structure
 export default mongoose.model("Member", MemberSchema);
