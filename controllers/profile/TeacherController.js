@@ -1,7 +1,7 @@
 // Local Modules
 import ServerAsyncError from "../../utils/ServerAsyncErrors.js";
 import MemberModel from "../../models/MemberModel.js";
-import StudentModel from "../../models/Profile/StudentModel.js";
+import StudentModel from "../../models/profile/StudentModel.js";
 
 export const fetchClass = ServerAsyncError(async (req, res) => {
   const { class: className } = req.params;
