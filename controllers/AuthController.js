@@ -7,9 +7,9 @@ import { validationResult } from "express-validator";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
-import StudentModel from "../models/Profile/StudentModel.js";
-import TeacherModel from "../models/Profile/TeacherModel.js";
-import AdminModel from "../models/Profile/AdminModel.js";
+import StudentModel from "../models/profile/StudentModel.js";
+import TeacherModel from "../models/profile/TeacherModel.js";
+import AdminModel from "../models/profile/AdminModel.js";
 
 export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   const Errors = validationResult(req);
