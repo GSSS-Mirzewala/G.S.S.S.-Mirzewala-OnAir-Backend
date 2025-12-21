@@ -2,11 +2,11 @@
 import express from "express";
 
 // Local Modules
-import { getAllStudents } from "../../controllers/profile/TeacherController.js";
+import { fetchClass } from "../../controllers/profile/TeacherController.js";
 
 const TeacherRouter = express.Router();
 
 // GET Requests Handling
-TeacherRouter.get("/get/students/class/:class", getAllStudents);
+TeacherRouter.get("/t/class/:class", fetchClass);
 
 export default TeacherRouter;

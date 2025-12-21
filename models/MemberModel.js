@@ -4,17 +4,17 @@ import mongoose from "mongoose";
 // Schema Structure
 const MemberSchema = mongoose.Schema(
   {
-    ustaPin: {
+    miPin: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      minlength: [11, "USTA PIN Should at least contain 11 Characters!"],
-      maxlength: [11, "USTA PIN Should only contain 11 Characters!"],
+      minlength: [11, "MI PIN Should at least contain 11 Characters!"],
+      maxlength: [11, "MI PIN Should only contain 11 Characters!"],
       immutable: true,
       match: [
         /^@(STD|TCH|ADM)\d{4}[A-Z]{3}$/,
-        "USTA PIN Should be in a Fixed Pattern!",
+        "MI PIN Should be in a Fixed Pattern!",
       ],
     },
     password: { type: String, required: true, select: false },

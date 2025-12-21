@@ -41,7 +41,7 @@ const MONGO_URI = process.env.MONGO_URI;
 app.use("/api/public", PublicRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
-app.use("/api/tch", TeacherRouter);
+app.use("/api/u", TeacherRouter);
 
 app.use(ErrorsHandler);
 

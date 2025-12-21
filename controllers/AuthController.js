@@ -1,12 +1,15 @@
 // External Modules
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
 
 // Local Modules
-import { create, verify } from "../utils/JWT.js";
-import { compare } from "../utils/Hash.js";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
+import StudentModel from "../models/Profile/StudentModel.js";
+import TeacherModel from "../models/Profile/TeacherModel.js";
+import AdminModel from "../models/Profile/AdminModel.js";
 
 export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   const Errors = validationResult(req);
@@ -14,14 +17,17 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   if (!Errors.isEmpty()) {
     return next(new ServerError(Errors.array()[0].msg, 400));
   } else {
-    const { ustaPin, password } = req.body.data;
+    const { miPin, password } = req.body.data;
 
     // Finding User in Database
-    let mongodata = await MemberModel.findOne({ ustaPin }).select("+password");
+    let mongodata = await MemberModel.findOne({ miPin }).select("+password");
     if (!mongodata) {
       return next(new ServerError("Account Doesn't Exist!", 404));
     } else {
-      const isPasswordMatched = compare(password, mongodata.password);
+      const isPasswordMatched = bcrypt.compareSync(
+        password,
+        mongodata.password
+      );
       if (!isPasswordMatched) {
         return next(new ServerError("Incorrect Password!", 401));
       } else {
@@ -33,7 +39,10 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
             )
           );
         } else {
-          const NewAuthToken = create(mongodata._id);
+          const NewAuthToken = jwt.sign(
+            { id: mongodata._id },
+            process.env.JWT_SECRET
+          );
 
           res.cookie("AuthToken", NewAuthToken, {
             httpOnly: true,
@@ -70,27 +79,30 @@ export const handleLogout = async (req, res) => {
 };
 
 export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
-  const decoded = verify(req.cookies.AuthToken);
+  const decoded = jwt.decode(req.cookies.AuthToken, process.env.JWT_SECRET);
   let mongodata = await MemberModel.findById(decoded.id)
-    .select("userType -_id")
+    .select("userType name photoUrl reference -_id")
     .lean();
 
-  if (mongodata.userType === "STD") {
-    mongodata = await MemberModel.findById(decoded.id)
-      .select("-_id -adminRef -teacherRef")
-      .populate("studentRef", "-_id");
-  } else if (mongodata.userType === "TCH") {
-    mongodata = await MemberModel.findById(decoded.id)
-      .select("-_id -studentRef -adminRef")
-      .populate("teacherRef", "-_id");
-  } else if (mongodata.userType === "ADM") {
-    mongodata = await MemberModel.findById(decoded.id)
-      .select("-_id -adminRef -studentRef")
-      .populate("adminRef", "-_id");
+  let mongodatax = null;
+  if (mongodata.userType === "Student") {
+    mongodatax = await StudentModel.findById(mongodata.reference)
+      .select("-_id")
+      .lean();
+  } else if (mongodata.userType === "Teacher") {
+    mongodatax = await TeacherModel.findById(mongodata.reference)
+      .select("-_id")
+      .lean();
+  } else if (mongodata.userType === "Admin") {
+    mongodatax = await AdminModel.findById(mongodata.reference)
+      .select("-_id")
+      .lean();
   }
 
+  mongodata = { ...mongodata, ...mongodatax };
+
   if (!mongodata) {
-    return next(new ServerError("Something went wrong!", 500));
+    return next(new ServerError("Cannot Get You!", 500));
   } else {
     return res.status(200).json({
       mongodata,

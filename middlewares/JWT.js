@@ -1,12 +1,14 @@
+// External Modules
+import jwt from "jsonwebtoken";
+
 // Local Modules
-import { verify } from "../utils/JWT.js";
 import ServerError from "../utils/ServerErrors.js";
 
 export function protect(req, res, next) {
   if (!req.cookies.AuthToken) {
     return next(new ServerError("You are Not Loggedin!", 401));
   } else {
-    const decoded = verify(req.cookies.AuthToken, process.env.JWT_SECRET);
+    const decoded = jwt.verify(req.cookies.AuthToken, process.env.JWT_SECRET);
     if (!decoded) {
       return next(new ServerError("You are Not Loggedin!", 401));
     } else {

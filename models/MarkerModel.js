@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 
 const MarkerSchema = mongoose.Schema(
   {
-    ustaPin: { type: String, required: true },
+    candidateId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Member",
+      required: true,
+    },
     rollNumber: { type: Number, required: true },
     class: { type: Number, required: true },
     section: { type: Number, default: "A" },

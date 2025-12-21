@@ -8,10 +8,11 @@ const PostSchema = mongoose.Schema(
       type: String,
       required: [true, "Notification description is Required!"],
     },
-    postedBy: {
-      type: String,
+    posterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Member"
       required: [true, "Poster details are Required!"],
-    }, // USTA PIN
+    },
     showTo: {
       type: String,
       required: [true, "Notification visibility is Required!"],

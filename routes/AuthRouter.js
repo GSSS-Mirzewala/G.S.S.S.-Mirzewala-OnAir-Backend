@@ -10,7 +10,7 @@ import {
 import { redirect, protect } from "../middlewares/JWT.js";
 
 // Validators
-import USTA_PIN_Validator from "../validators/USTA_PIN_Validator.js";
+import MI_PIN_Validator from "../validators/MI_PIN_Validator.js";
 import PasswordValidator from "../validators/PasswordValidator.js";
 
 // Creating Router
@@ -23,7 +23,7 @@ AuthRouter.get("/me", [protect], identifyMe);
 AuthRouter.post("/logout", [protect], handleLogout);
 AuthRouter.post(
   "/login",
-  [redirect, USTA_PIN_Validator, PasswordValidator],
+  [redirect, MI_PIN_Validator, PasswordValidator],
   handleLogin
 );
 

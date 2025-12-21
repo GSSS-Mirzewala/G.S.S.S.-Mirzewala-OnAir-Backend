@@ -1,9 +1,9 @@
 // Local Modules
 import HelpModel from "../models/HelpModel.js";
 import ServerError from "../utils/ServerErrors.js";
-import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
+import ServerAsyncError from "../utils/ServerAsyncErrors.js";
 
-export const addToDatabase = AsyncErrorsHandler(async (req, res, next) => {
+export const addToDatabase = ServerAsyncError(async (req, res, next) => {
   const { email, concern } = req.body.data;
   const mongodata = await HelpModel.countDocuments({
     email: email,
