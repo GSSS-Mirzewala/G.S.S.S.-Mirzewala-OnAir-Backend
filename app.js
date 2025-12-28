@@ -5,11 +5,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
-// Local Modules (Routers)
+// Local Modules
 import PublicRouter from "./routes/PublicRouter.js";
 import AuthRouter from "./routes/AuthRouter.js";
 import HelpRouter from "./routes/HelpRouter.js";
 import ErrorsHandler from "./middlewares/ServerErrors.js";
+import InternalsRouter from "./routes/InternalsRouter.js";
 
 // Profile Based Routers
 import TeacherRouter from "./routes/profile/TeacherRouter.js";
@@ -39,6 +40,7 @@ const MONGO_URI = process.env.MONGO_URI;
 
 // Routers
 app.use("/api/public", PublicRouter);
+app.use("/api/i", InternalsRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 app.use("/api/u", TeacherRouter);

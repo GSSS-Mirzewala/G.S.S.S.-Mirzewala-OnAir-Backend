@@ -40,7 +40,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
           );
         } else {
           const NewAuthToken = jwt.sign(
-            { id: mongodata._id },
+            { id: mongodata._id, userType: mongodata.userType },
             process.env.JWT_SECRET
           );
 
