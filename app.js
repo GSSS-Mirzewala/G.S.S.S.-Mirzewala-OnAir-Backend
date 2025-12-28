@@ -47,15 +47,15 @@ app.use("/api/u", TeacherRouter);
 
 app.use(ErrorsHandler);
 
-// Start Server
-mongoose
-  .connect(MONGO_URI)
-  .then(() => {
-    console.log("✔  Connected to MongoDb Successfully!");
-    app.listen(PORT, () => {
-      console.log(`✔  App is Running at localhost:${PORT}!`);
+// Start Server & Connect to MongoDb
+app.listen(PORT, () => {
+  console.log(`✔  App is Running at localhost:${PORT}!`);
+  mongoose
+    .connect(MONGO_URI)
+    .then(() => {
+      console.log("✔  Connected to MongoDb Successfully!");
+    })
+    .catch((err) => {
+      console.log(`❌ Error Occured While Connecting to MongoDb: ${err}`);
     });
-  })
-  .catch((err) => {
-    console.log(`❌ Error Occured While Connecting to MongoDb: ${err}`);
-  });
+});
