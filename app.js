@@ -6,14 +6,14 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
 // Local Modules
-import PublicRouter from "./routes/PublicRouter.js";
-import AuthRouter from "./routes/AuthRouter.js";
-import HelpRouter from "./routes/HelpRouter.js";
+import PublicRouter from "./routers/PublicRouter.js";
+import AuthRouter from "./routers/AuthRouter.js";
+import HelpRouter from "./routers/HelpRouter.js";
+import InternalsRouter from "./routers/InternalsRouter.js";
 import ErrorsHandler from "./middlewares/ServerErrors.js";
-import InternalsRouter from "./routes/InternalsRouter.js";
 
 // Profile Based Routers
-import TeacherRouter from "./routes/profile/TeacherRouter.js";
+import TeacherRouter from "./routers/profile/TeacherRouter.js";
 
 // Loading Enviornments
 dotenv.config();
@@ -43,7 +43,7 @@ app.use("/api/public", PublicRouter);
 app.use("/api/i", InternalsRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
-app.use("/api/u", TeacherRouter);
+app.use("/api/u/t", TeacherRouter);
 
 app.use(ErrorsHandler);
 

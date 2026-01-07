@@ -10,8 +10,10 @@ import {
 import { redirect, protect } from "../middlewares/JWT.js";
 
 // Validators
-import MI_PIN_Validator from "../validators/MI_PIN_Validator.js";
-import PasswordValidator from "../validators/PasswordValidator.js";
+import {
+  MiPinValidator,
+  PasswordValidator,
+} from "../validators/AuthValidator.js";
 
 // Creating Router
 const AuthRouter = express.Router();
@@ -23,7 +25,7 @@ AuthRouter.get("/me", [protect], identifyMe);
 AuthRouter.post("/logout", [protect], handleLogout);
 AuthRouter.post(
   "/login",
-  [redirect, MI_PIN_Validator, PasswordValidator],
+  [redirect, MiPinValidator, PasswordValidator],
   handleLogin
 );
 

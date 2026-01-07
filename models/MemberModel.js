@@ -44,9 +44,13 @@ const MemberSchema = mongoose.Schema(
       trim: true,
       lowercase: true,
     },
+    avatarUrl: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/dbelpwtoy/image/upload/f_auto,q_auto/v1767074898/Avatar_si1ngf.svg",
+    },
     phone: { type: Number },
     address: { type: String },
-    photoUrl: { type: String },
     reference: {
       type: mongoose.Schema.Types.ObjectId,
       refPath: "userType",
@@ -62,6 +66,11 @@ MemberSchema.virtual("age").get(function () {
   return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
 });
 
+// Configurations
+MemberSchema.set("toJSON", { virtuals: true });
+MemberSchema.set("toObject", { virtuals: true });
+
+// Indexes
 MemberSchema.index({ userType: 1, accountStatus: 1 });
 
 // Creating & Exporting Model of Schema Structure

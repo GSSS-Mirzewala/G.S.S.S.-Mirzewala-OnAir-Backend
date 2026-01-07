@@ -7,9 +7,10 @@ import { validationResult } from "express-validator";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
-import StudentModel from "../models/Profile/StudentModel.js";
-import TeacherModel from "../models/Profile/TeacherModel.js";
-import AdminModel from "../models/Profile/AdminModel.js";
+
+import StudentModel from "../models/profile/StudentModel.js";
+import TeacherModel from "../models/profile/TeacherModel.js";
+import AdminModel from "../models/profile/AdminModel.js";
 
 export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   const Errors = validationResult(req);
@@ -21,6 +22,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
 
     // Finding User in Database
     let mongodata = await MemberModel.findOne({ miPin }).select("+password");
+    console.log("1. ", mongodata);
     if (!mongodata) {
       return next(new ServerError("Account Doesn't Exist!", 404));
     } else {
@@ -57,7 +59,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
           delete User.password;
           return res.status(200).json({
             success: true,
-            mongodata: User,
+            mongodata: { common: User },
           });
         }
       }
@@ -80,9 +82,7 @@ export const handleLogout = async (req, res) => {
 
 export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
   const decoded = jwt.decode(req.cookies.AuthToken, process.env.JWT_SECRET);
-  let mongodata = await MemberModel.findById(decoded.id)
-    .select("userType name photoUrl reference -_id")
-    .lean();
+  let mongodata = await MemberModel.findById(decoded.id).select("-_id").lean();
 
   let mongodatax = null;
   if (mongodata.userType === "Student") {
@@ -99,7 +99,7 @@ export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
       .lean();
   }
 
-  mongodata = { ...mongodata, ...mongodatax };
+  mongodata = { common: { ...mongodata }, special: { ...mongodatax } };
 
   if (!mongodata) {
     return next(new ServerError("Cannot Get You!", 500));
