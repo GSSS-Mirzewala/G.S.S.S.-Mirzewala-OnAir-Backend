@@ -18,11 +18,10 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   if (!Errors.isEmpty()) {
     return next(new ServerError(Errors.array()[0].msg, 400));
   } else {
-    const { miPin, password } = req.body.data;
+    const { miPin, password } = req.body;
 
     // Finding User in Database
     let mongodata = await MemberModel.findOne({ miPin }).select("+password");
-    console.log("1. ", mongodata);
     if (!mongodata) {
       return next(new ServerError("Account Doesn't Exist!", 404));
     } else {

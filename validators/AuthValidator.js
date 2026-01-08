@@ -2,7 +2,7 @@
 import { check } from "express-validator";
 
 export const MiPinValidator = [
-  check("data.miPin")
+  check("miPin")
     .trim()
     .notEmpty()
     .withMessage("MI_PIN_REQUIRED")
@@ -25,7 +25,7 @@ export const MiPinValidator = [
 ];
 
 export const PasswordValidator = [
-  check("data.password")
+  check("password")
     .trim()
     .notEmpty()
     .withMessage("PASSWORD_REQUIRED")

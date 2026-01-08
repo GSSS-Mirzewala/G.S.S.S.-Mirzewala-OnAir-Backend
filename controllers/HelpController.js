@@ -4,7 +4,7 @@ import ServerError from "../utils/ServerErrors.js";
 import ServerAsyncError from "../utils/ServerAsyncErrors.js";
 
 export const addToDatabase = ServerAsyncError(async (req, res, next) => {
-  const { email, concern } = req.body.data;
+  const { email, concern } = req.body;
   const mongodata = await HelpModel.countDocuments({
     email: email,
     status: "PENDING",
