@@ -13,6 +13,9 @@ import InternalsRouter from "./routers/InternalsRouter.js";
 import ToolsRouter from "./routers/ToolsRouter.js";
 import ErrorsHandler from "./middlewares/ServerErrors.js";
 
+// Cron Workers
+import "./crons/UpdateOnline.cron.js";
+
 // Loading Enviornments
 dotenv.config();
 

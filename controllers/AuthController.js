@@ -66,7 +66,23 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   }
 });
 
-export const handleLogout = async (req, res) => {
+export const handleLogout = async (req, res, next) => {
+  const decoded = jwt.verify(req.cookies.AuthToken, process.env.JWT_SECRET);
+
+  const mongodata = await MemberModel.findByIdAndUpdate(
+    { _id: decoded.id },
+    {
+      isOnline: false,
+      lastSeen: new Date(),
+    }
+  );
+
+  if (!mongodata) {
+    return next(
+      new ServerError("Failed to Update Online Status!", "UPDATE_ONLINE_FAILED")
+    );
+  }
+
   res.clearCookie("AuthToken", {
     httpOnly: true,
     secure: true,
