@@ -9,7 +9,6 @@ const OFFLINE_THRESHOLD = 2 * 60 * 1000; // 2 Minutes
 cron.schedule("*/1 * * * *", async () => {
   try {
     const CUT_OFF = new Date(Date.now() - OFFLINE_THRESHOLD);
-
     await MemberModel.updateMany(
       {
         isOnline: true,

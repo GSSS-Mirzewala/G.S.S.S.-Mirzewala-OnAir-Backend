@@ -14,7 +14,15 @@ export const checkHealth = (req, res) => {
 };
 
 export const respondHeatBeat = AsyncErrorsHandler(async (req, res, next) => {
+  if (!req.cookies.AuthToken) {
+    return next(new ServerError("You are not LoggedIn.", 401));
+  }
+
   const decoded = jwt.verify(req.cookies.AuthToken, process.env.JWT_SECRET);
+
+  if (!decoded) {
+    return next(new ServerError("You are not LoggedIn.", 401));
+  }
 
   const mongodata = await MemberModel.findByIdAndUpdate(
     { _id: decoded.id },
@@ -25,9 +33,7 @@ export const respondHeatBeat = AsyncErrorsHandler(async (req, res, next) => {
   );
 
   if (!mongodata) {
-    return next(
-      new ServerError("Failed to Update Online Status!", "UPDATE_ONLINE_FAILED")
-    );
+    return next(new ServerError("Failed to Update Online Status!", 400));
   }
 
   res.status(200).json({
