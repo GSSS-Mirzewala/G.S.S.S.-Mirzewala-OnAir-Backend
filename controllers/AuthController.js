@@ -97,7 +97,7 @@ export const handleLogout = async (req, res, next) => {
 
 export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
   const decoded = jwt.decode(req.cookies.AuthToken, process.env.JWT_SECRET);
-  let mongodata = await MemberModel.findById(decoded.id).select("-_id").lean();
+  let mongodata = await MemberModel.findById(decoded.id).lean();
 
   let mongodatax = null;
   if (mongodata.userType === "Student") {

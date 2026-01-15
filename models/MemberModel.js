@@ -56,6 +56,7 @@ const MemberSchema = mongoose.Schema(
       refPath: "userType",
       required: true,
     },
+    isVerified: { type: Boolean, default: false },
     isOnline: { type: Boolean, default: false },
     lastSeen: { type: Date, default: null },
   },
