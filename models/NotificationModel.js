@@ -10,7 +10,7 @@ const PostSchema = mongoose.Schema(
     },
     posterId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Member"
+      ref: "Member",
       required: [true, "Poster details are Required!"],
     },
     showTo: {
@@ -18,13 +18,13 @@ const PostSchema = mongoose.Schema(
       required: [true, "Notification visibility is Required!"],
       default: "Everyone",
       enum: {
-        values: ["Everyone", "Staff", "Schoolies", "Non-Schoolies"],
+        values: ["Everyone", "Staff", "Schoolies"],
         message: "Invalid Visibility Type!",
       },
     },
     photoUrl: { type: String },
   },
-  { timestamp: true }
+  { timestamp: true },
 );
 
 // Creating & Exporting Model of Schema Structure
