@@ -2,11 +2,7 @@
 import express from "express";
 
 // Local Modules
-import {
-  handleLogin,
-  handleLogout,
-  identifyMe,
-} from "../controllers/AuthController.js";
+import { handleLogin, handleLogout } from "../controllers/AuthController.js";
 import { redirect, protect } from "../middlewares/JWT.js";
 
 // Validators
@@ -18,15 +14,12 @@ import {
 // Creating Router
 const AuthRouter = express.Router();
 
-// GET Requests Handling
-AuthRouter.get("/me", [protect], identifyMe);
-
 // POST Requests Handling
 AuthRouter.post("/logout", [protect], handleLogout);
 AuthRouter.post(
   "/login",
   [redirect, MiPinValidator, PasswordValidator],
-  handleLogin
+  handleLogin,
 );
 
 export default AuthRouter;

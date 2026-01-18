@@ -8,10 +8,6 @@ import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
 
-import StudentModel from "../models/profile/StudentModel.js";
-import TeacherModel from "../models/profile/TeacherModel.js";
-import AdminModel from "../models/profile/AdminModel.js";
-
 export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   const Errors = validationResult(req);
 
@@ -27,7 +23,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
     } else {
       const isPasswordMatched = bcrypt.compareSync(
         password,
-        mongodata.password
+        mongodata.password,
       );
       if (!isPasswordMatched) {
         return next(new ServerError("Incorrect Password!", 401));
@@ -36,13 +32,13 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
           return next(
             new ServerError(
               "Your Account is Not Active to use. Contact the School Administration for Help.",
-              403
-            )
+              403,
+            ),
           );
         } else {
           const NewAuthToken = jwt.sign(
             { id: mongodata._id, userType: mongodata.userType },
-            process.env.JWT_SECRET
+            process.env.JWT_SECRET,
           );
 
           res.cookie("AuthToken", NewAuthToken, {
@@ -74,12 +70,15 @@ export const handleLogout = async (req, res, next) => {
     {
       isOnline: false,
       lastSeen: new Date(),
-    }
+    },
   );
 
   if (!mongodata) {
     return next(
-      new ServerError("Failed to Update Online Status!", "UPDATE_ONLINE_FAILED")
+      new ServerError(
+        "Failed to Update Online Status!",
+        "UPDATE_ONLINE_FAILED",
+      ),
     );
   }
 
@@ -94,34 +93,3 @@ export const handleLogout = async (req, res, next) => {
     .status(200)
     .json({ success: true, message: "Logged out successfully" });
 };
-
-export const identifyMe = AsyncErrorsHandler(async (req, res, next) => {
-  const decoded = jwt.decode(req.cookies.AuthToken, process.env.JWT_SECRET);
-  let mongodata = await MemberModel.findById(decoded.id).lean();
-
-  let mongodatax = null;
-  if (mongodata.userType === "Student") {
-    mongodatax = await StudentModel.findById(mongodata.reference)
-      .select("-_id")
-      .lean();
-  } else if (mongodata.userType === "Teacher") {
-    mongodatax = await TeacherModel.findById(mongodata.reference)
-      .select("-_id")
-      .lean();
-  } else if (mongodata.userType === "Admin") {
-    mongodatax = await AdminModel.findById(mongodata.reference)
-      .select("-_id")
-      .lean();
-  }
-
-  mongodata = { common: { ...mongodata }, special: { ...mongodatax } };
-
-  if (!mongodata) {
-    return next(new ServerError("Cannot Get You!", 500));
-  } else {
-    return res.status(200).json({
-      mongodata,
-      success: true,
-    });
-  }
-});
