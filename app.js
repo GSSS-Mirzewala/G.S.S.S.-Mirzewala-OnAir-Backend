@@ -12,7 +12,6 @@ import HelpRouter from "./routers/HelpRouter.js";
 import InternalsRouter from "./routers/InternalsRouter.js";
 import ToolsRouter from "./routers/ToolsRouter.js";
 import ProfileRouter from "./routers/ProfileRouter.js";
-import PortalsRouter from "./routers/PortalsRouter.js";
 import ErrorsHandler from "./middlewares/ServerErrors.js";
 
 // Cron Workers
@@ -47,14 +46,13 @@ app.use("/api/i", InternalsRouter);
 app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 app.use("/api/t", ToolsRouter);
-app.use("/api/p", PortalsRouter);
 app.use("/api/u", ProfileRouter);
 
 app.use(ErrorsHandler);
 
 // Start Server & Connect to MongoDb
 app.listen(PORT, () => {
-  console.log(`✔  App is Running at Successfully!`);
+  console.log(`✔  App is Running Successfully!`);
   mongoose
     .connect(MONGO_URI)
     .then(() => {

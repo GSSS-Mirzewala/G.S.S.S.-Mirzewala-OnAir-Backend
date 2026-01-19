@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const MarkerSchema = mongoose.Schema(
   {
-    candidateId: {
+    studentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Member",
       required: true,
@@ -18,7 +18,7 @@ const MarkerSchema = mongoose.Schema(
       default: "UNALLOCATED",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Marker", MarkerSchema);

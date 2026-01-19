@@ -1,9 +1,9 @@
 // Local Modules
-import ServerAsyncError from "../utils/ServerAsyncErrors.js";
+import AsyncErrorHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
 import StudentModel from "../models/profile/StudentModel.js";
 
-export const fetchClass = ServerAsyncError(async (req, res) => {
+export const fetchClass = AsyncErrorHandler(async (req, res) => {
   const { class: className } = req.params;
 
   const members = await MemberModel.find({
