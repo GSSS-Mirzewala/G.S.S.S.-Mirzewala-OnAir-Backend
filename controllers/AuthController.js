@@ -19,22 +19,17 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
     // Finding User in Database
     let mongodata = await MemberModel.findOne({ miPin }).select("+password");
     if (!mongodata) {
-      return next(new ServerError("Account Doesn't Exist!", 404));
+      return next(new ServerError("ACCOUNT_NOT_FOUND", 404));
     } else {
       const isPasswordMatched = bcrypt.compareSync(
         password,
         mongodata.password,
       );
       if (!isPasswordMatched) {
-        return next(new ServerError("Incorrect Password!", 401));
+        return next(new ServerError("WRONG_PASSWORD", 401));
       } else {
         if (mongodata.accountStatus !== "ACTIVE") {
-          return next(
-            new ServerError(
-              "Your Account is Not Active to use. Contact the School Administration for Help.",
-              403,
-            ),
-          );
+          return next(new ServerError( "ACCOUNT_NOT_ACTIVE", 403));
         } else {
           const NewAuthToken = jwt.sign(
             { id: mongodata._id, userType: mongodata.userType },
@@ -76,8 +71,7 @@ export const handleLogout = async (req, res, next) => {
   if (!mongodata) {
     return next(
       new ServerError(
-        "Failed to Update Online Status!",
-        "UPDATE_ONLINE_FAILED",
+        "FAILED_TO_UPDATE_ONLINE", 409
       ),
     );
   }

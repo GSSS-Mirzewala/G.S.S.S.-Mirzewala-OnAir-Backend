@@ -31,7 +31,7 @@ export const getMyInfo = AsyncErrorHandler(async (req, res, next) => {
   mongodata = { common: { ...mongodata }, special: { ...mongodatax } };
 
   if (!mongodata) {
-    return next(new ServerError("Cannot Get You!", 500));
+    return next(new ServerError("FAILED_TO_GET_YOU", 500));
   } else {
     return res.status(200).json({
       mongodata,

@@ -31,10 +31,11 @@ app.use(
   }),
 );
 
-// Middlewares
+// Configurations
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", true);
 
 // Constants
 const PORT = process.env.PORT;

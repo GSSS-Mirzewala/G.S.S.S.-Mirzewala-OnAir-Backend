@@ -5,17 +5,26 @@ import ServerAsyncError from "../utils/ServerAsyncErrors.js";
 
 export const addToDatabase = ServerAsyncError(async (req, res, next) => {
   const { email, concern } = req.body;
-  const mongodata = await HelpModel.countDocuments({
+  let mongodata = await HelpModel.countDocuments({
     email: email,
     status: "PENDING",
-  }).select("status");
+  })
 
   if (mongodata >= 3) {
-    return next(new ServerError("You have Reached Your Limits!", 429));
+    return next(new ServerError('HELP_LIMITS_REACHED', 429));
+  }
+
+  mongodata = await HelpModel.countDocuments({
+    ip: req.ip,
+    status: "PENDING",
+  })
+
+  if (mongodata >= 3) {
+    return next(new ServerError('HELP_LIMITS_REACHED', 429));
   }
 
   // If Limits are not Exceeded
-  await HelpModel.create({ email, concern });
+  await HelpModel.create({ email, concern, ip: req.ip });
 
   res.status(201).json({
     success: true,

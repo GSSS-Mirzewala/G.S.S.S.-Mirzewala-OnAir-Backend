@@ -1,4 +1,5 @@
 // Local Modules
+import ServerError from "../utils/ServerErrors.js"
 import AsyncErrorHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
 import StudentModel from "../models/profile/StudentModel.js";
@@ -14,9 +15,7 @@ export const fetchClass = AsyncErrorHandler(async (req, res) => {
     .lean();
 
   if (!members.length) {
-    return res
-      .status(404)
-      .json({ success: false, message: "No students found" });
+    return next(new ServerError("STUDENT_NOT_FOUND", 404));
   }
 
   const refIds = members.map((m) => m.reference);
@@ -41,7 +40,7 @@ export const fetchClass = AsyncErrorHandler(async (req, res) => {
     .filter(Boolean);
 
   if (!filtered.length) {
-    return res.status(404).json({ success: false, message: "Data not Found!" });
+    return next(new ServerError("SOMETHING_NOT_FOUND", 404));
   }
 
   return res.status(200).json({ success: true, mongodata: filtered });

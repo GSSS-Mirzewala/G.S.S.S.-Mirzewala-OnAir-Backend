@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 // Schema Structure
 const HelpSchema = mongoose.Schema(
   {
-    email: { type: String, required: true, trim: true },
+    email: { type: String, required: true, trim: true, index: true },
+    ip: {type: String, required: true, trim: true, index: true},
     concern: { type: String, required: true },
     status: {
       type: String,
