@@ -4,9 +4,10 @@ import mongoose from "mongoose";
 // Schema Structure
 const PostSchema = mongoose.Schema(
   {
-    context: {
+    content: {
       type: String,
       required: [true, "Notification description is Required!"],
+      maxLength: 10000,
     },
     posterId: {
       type: mongoose.Schema.Types.ObjectId,
@@ -15,14 +16,13 @@ const PostSchema = mongoose.Schema(
     },
     showTo: {
       type: String,
-      required: [true, "Notification visibility is Required!"],
       default: "Everyone",
       enum: {
         values: ["Everyone", "Staff", "Schoolies"],
         message: "Invalid Visibility Type!",
       },
     },
-    photoUrl: { type: String },
+    photoUrl: { type: String, default: null },
   },
   { timestamp: true },
 );

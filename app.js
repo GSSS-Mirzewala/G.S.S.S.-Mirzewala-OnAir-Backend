@@ -12,6 +12,7 @@ import HelpRouter from "./routers/HelpRouter.js";
 import InternalsRouter from "./routers/InternalsRouter.js";
 import ToolsRouter from "./routers/ToolsRouter.js";
 import ProfileRouter from "./routers/ProfileRouter.js";
+import PostRouter from "./routers/PostRouter.js";
 import ErrorsHandler from "./middlewares/ServerErrors.js";
 
 // Cron Workers
@@ -48,6 +49,7 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 app.use("/api/t", ToolsRouter);
 app.use("/api/u", ProfileRouter);
+app.use("/api/p", PostRouter);
 
 app.use(ErrorsHandler);
 
