@@ -9,10 +9,11 @@ const PostSchema = mongoose.Schema(
       required: [true, "Notification description is Required!"],
       maxLength: 10000,
     },
-    posterId: {
+    poster: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Member",
       required: [true, "Poster details are Required!"],
+      index: true,
     },
     showTo: {
       type: String,
@@ -24,7 +25,7 @@ const PostSchema = mongoose.Schema(
     },
     photoUrl: { type: String, default: null },
   },
-  { timestamp: true },
+  { timestamps: true },
 );
 
 // Creating & Exporting Model of Schema Structure

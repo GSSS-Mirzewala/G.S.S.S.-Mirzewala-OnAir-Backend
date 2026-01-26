@@ -2,7 +2,7 @@
 import express from "express";
 
 // Local Modules
-import { create } from "../controllers/PostController.js";
+import { create, fetch } from "../controllers/PostController.js";
 import {
   validateContent,
   validateVisibility,
@@ -10,6 +10,9 @@ import {
 import { protect } from "../middlewares/JWT.js";
 
 const PostRouter = express.Router();
+
+// GET Requests Handlers
+PostRouter.get("/fetch", [protect], fetch);
 
 // POST Requests Handlers
 PostRouter.post(

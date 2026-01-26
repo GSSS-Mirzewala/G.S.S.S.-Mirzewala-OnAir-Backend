@@ -13,6 +13,10 @@ export const getMyInfo = AsyncErrorHandler(async (req, res, next) => {
   const decoded = jwt.decode(req.cookies.AuthToken, process.env.JWT_SECRET);
   let mongodata = await MemberModel.findById(decoded.id).lean();
 
+  if (!mongodata) {
+    return next(new ServerError("USER_NOT_FOUND", 404));
+  }
+
   let mongodatax = null;
   if (mongodata.userType === "Student") {
     mongodatax = await StudentModel.findById(mongodata.reference)
@@ -30,14 +34,10 @@ export const getMyInfo = AsyncErrorHandler(async (req, res, next) => {
 
   mongodata = { common: { ...mongodata }, special: { ...mongodatax } };
 
-  if (!mongodata) {
-    return next(new ServerError("FAILED_TO_GET_YOU", 500));
-  } else {
-    return res.status(200).json({
-      mongodata,
-      success: true,
-    });
-  }
+  return res.status(200).json({
+    mongodata,
+    success: true,
+  });
 });
 
 export const getMyProfile = AsyncErrorHandler(async (req, res, next) => {

@@ -14,10 +14,6 @@ export const checkHealth = (req, res) => {
 };
 
 export const respondHeatBeat = AsyncErrorsHandler(async (req, res, next) => {
-  if (!req.cookies.AuthToken) {
-    return next(new ServerError("NOT_LOGGED_IN", 401));
-  }
-
   const decoded = jwt.verify(req.cookies.AuthToken, process.env.JWT_SECRET);
 
   if (!decoded) {
@@ -29,7 +25,7 @@ export const respondHeatBeat = AsyncErrorsHandler(async (req, res, next) => {
     {
       isOnline: true,
       lastSeen: new Date(),
-    }
+    },
   );
 
   if (!mongodata) {

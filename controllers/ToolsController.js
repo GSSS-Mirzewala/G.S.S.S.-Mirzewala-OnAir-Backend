@@ -1,5 +1,5 @@
 // Local Modules
-import ServerError from "../utils/ServerErrors.js"
+import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorHandler from "../utils/ServerAsyncErrors.js";
 import MemberModel from "../models/MemberModel.js";
 import StudentModel from "../models/profile/StudentModel.js";
@@ -14,7 +14,7 @@ export const fetchClass = AsyncErrorHandler(async (req, res) => {
     .select("name avatarUrl reference")
     .lean();
 
-  if (!members.length) {
+  if (!members) {
     return next(new ServerError("STUDENT_NOT_FOUND", 404));
   }
 

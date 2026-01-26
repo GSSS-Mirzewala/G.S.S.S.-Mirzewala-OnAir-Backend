@@ -5,7 +5,7 @@ import { validationResult } from "express-validator";
 
 // Local Modules
 import PostModel from "../models/PostModel.js";
-import ServerError from "../utils/ServerErrors.js";
+import MemberModel from "../models/MemberModel.js";
 import AsyncServerHandler from "../utils/ServerAsyncErrors.js";
 
 export const create = AsyncServerHandler(async (req, res, next) => {
@@ -19,18 +19,27 @@ export const create = AsyncServerHandler(async (req, res, next) => {
     });
   }
 
-  const mongod = await PostModel.create({
+  await PostModel.create({
     content: req.body.content,
     showTo: req.body.showTo,
-    posterId: new mongoose.Types.ObjectId(decoded),
+    poster: new mongoose.Types.ObjectId(decoded),
   });
-
-  if (!mongod) {
-    return next(new ServerError("POST_CREATION_FAILED", 400));
-  }
 
   return res.status(201).json({
     isSuccess: true,
     message: "Post created Successfully!",
+  });
+});
+
+export const fetch = AsyncServerHandler(async (req, res, next) => {
+  const mongodata = await PostModel.find({})
+    .populate("poster")
+    .sort({ _id: -1 })
+    .limit(10)
+    .lean();
+
+  res.status(200).json({
+    isSuccess: true,
+    data: mongodata,
   });
 });

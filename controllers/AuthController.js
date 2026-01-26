@@ -13,48 +13,44 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
 
   if (!Errors.isEmpty()) {
     return next(new ServerError(Errors.array()[0].msg, 400));
-  } else {
-    const { miPin, password } = req.body;
-
-    // Finding User in Database
-    let mongodata = await MemberModel.findOne({ miPin }).select("+password");
-    if (!mongodata) {
-      return next(new ServerError("ACCOUNT_NOT_FOUND", 404));
-    } else {
-      const isPasswordMatched = bcrypt.compareSync(
-        password,
-        mongodata.password,
-      );
-      if (!isPasswordMatched) {
-        return next(new ServerError("WRONG_PASSWORD", 401));
-      } else {
-        if (mongodata.accountStatus !== "ACTIVE") {
-          return next(new ServerError( "ACCOUNT_NOT_ACTIVE", 403));
-        } else {
-          const NewAuthToken = jwt.sign(
-            { id: mongodata._id, userType: mongodata.userType },
-            process.env.JWT_SECRET,
-          );
-
-          res.cookie("AuthToken", NewAuthToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            path: "/",
-            maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Days
-          });
-
-          // Sending Final Response
-          const User = mongodata.toObject();
-          delete User.password;
-          return res.status(200).json({
-            success: true,
-            mongodata: { common: User },
-          });
-        }
-      }
-    }
   }
+  const { miPin, password } = req.body;
+
+  // Finding User in Database
+  let mongodata = await MemberModel.findOne({ miPin }).select("+password");
+  if (!mongodata) {
+    return next(new ServerError("ACCOUNT_NOT_FOUND", 404));
+  }
+
+  if (!bcrypt.compareSync(password, mongodata.password)) {
+    return next(new ServerError("WRONG_PASSWORD", 401));
+  }
+
+  if (mongodata.accountStatus !== "ACTIVE") {
+    return next(new ServerError("ACCOUNT_NOT_ACTIVE", 403));
+  }
+
+  const NewAuthToken = jwt.sign(
+    { id: mongodata._id, userType: mongodata.userType },
+    process.env.JWT_SECRET,
+  );
+
+  res.cookie("AuthToken", NewAuthToken, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    path: "/",
+    maxAge: 1000 * 60 * 60 * 24 * 14, // 14 Days
+  });
+
+  // Sending Final Response
+  const User = mongodata.toObject();
+  delete User.password;
+
+  return res.status(200).json({
+    success: true,
+    mongodata: { common: User },
+  });
 });
 
 export const handleLogout = async (req, res, next) => {
@@ -69,11 +65,7 @@ export const handleLogout = async (req, res, next) => {
   );
 
   if (!mongodata) {
-    return next(
-      new ServerError(
-        "FAILED_TO_UPDATE_ONLINE", 409
-      ),
-    );
+    return next(new ServerError("FAILED_TO_UPDATE_ONLINE", 409));
   }
 
   res.clearCookie("AuthToken", {
