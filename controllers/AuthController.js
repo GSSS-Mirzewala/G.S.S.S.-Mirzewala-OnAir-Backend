@@ -49,7 +49,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
-    mongodata: { common: User },
+    mongodata: User,
   });
 });
 
