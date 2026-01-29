@@ -4,9 +4,9 @@ import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
 
 // Local Modules
+import MemberModel from "../models/MemberModel.js";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
-import MemberModel from "../models/MemberModel.js";
 
 export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   const Errors = validationResult(req);

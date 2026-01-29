@@ -15,6 +15,11 @@ import ProfileRouter from "./routers/ProfileRouter.js";
 import PostRouter from "./routers/PostRouter.js";
 import ErrorsHandler from "./middlewares/ServerErrors.js";
 
+// Models
+import "./models/profile/StudentModel.js";
+import "./models/profile/TeacherModel.js";
+import "./models/profile/AdminModel.js";
+
 // Cron Workers
 import "./crons/UpdateOnline.cron.js";
 
