@@ -19,7 +19,7 @@ export const addToDatabase = ServerAsyncError(async (req, res, next) => {
   await HelpModel.create({ email, concern, ip: req.ip });
 
   res.status(201).json({
-    success: true,
+    isSuccess: true,
     message:
       '"Your help request has been submitted! We\'ll get back to you soon!"',
   });

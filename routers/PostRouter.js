@@ -2,12 +2,7 @@
 import express from "express";
 
 // Local Modules
-import {
-  create,
-  fetchForEveryone,
-  fetchForSchoolies,
-  fetchForStaff,
-} from "../controllers/PostController.js";
+import { create, fetch } from "../controllers/PostController.js";
 import {
   validateContent,
   validateVisibility,
@@ -17,9 +12,7 @@ import { protect } from "../middlewares/JWT.js";
 const PostRouter = express.Router();
 
 // GET Requests Handlers
-PostRouter.get("/fetch/everyone", fetchForEveryone);
-PostRouter.get("/fetch/staff", [protect], fetchForStaff);
-PostRouter.get("/fetch/schoolies", [protect], fetchForSchoolies);
+PostRouter.get("/fetch", fetch);
 
 // POST Requests Handlers
 PostRouter.post(

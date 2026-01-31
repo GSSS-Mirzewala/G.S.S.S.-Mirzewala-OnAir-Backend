@@ -1,13 +1,9 @@
 class ServerError extends Error {
-  constructor(errorCode, statusCode = 500) {
-    super(errorCode);
-
-    this.errorCode = errorCode
+  constructor(code, statusCode = 500, meta = {}) {
+    super(code);
+    this.code = code;
     this.statusCode = statusCode;
-    this.status = `${statusCode}`.startsWith("4") ? "fail" : "error";
-    this.isOperational = true;
-
-    Error.captureStackTrace(this, this.constructor);
+    this.meta = meta;
   }
 }
 

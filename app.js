@@ -13,7 +13,6 @@ import InternalsRouter from "./routers/InternalsRouter.js";
 import ToolsRouter from "./routers/ToolsRouter.js";
 import ProfileRouter from "./routers/ProfileRouter.js";
 import PostRouter from "./routers/PostRouter.js";
-import ErrorsHandler from "./middlewares/ServerErrors.js";
 
 // Models
 import "./models/profile/StudentModel.js";
@@ -56,7 +55,16 @@ app.use("/api/t", ToolsRouter);
 app.use("/api/u", ProfileRouter);
 app.use("/api/p", PostRouter);
 
-app.use(ErrorsHandler);
+// Error Handler
+app.use((err, req, res, next) => {
+  // console.error("🔥 ERROR:", err); // (for Debugging)
+
+  res.status(err.statusCode || 500).json({
+    isSuccess: false,
+    code: err.code || "INTERNAL_SERVER_ERROR",
+    meta: err.meta || null,
+  });
+});
 
 // Start Server & Connect to MongoDb
 app.listen(PORT, () => {

@@ -4,16 +4,18 @@ import mongoose from "mongoose";
 // Schema Strucutre
 const AdminSchema = mongoose.Schema(
   {
+    permissionsLevel: {
+      type: String,
+      enum: ["FULL", "MODERATE", "LOW"],
+      default: "FULL",
+    },
     status: {
       type: String,
-      enum: {
-        values: ["ACTIVE", "ON_LEAVE", "RETIRED"],
-        message: "Invalid Admin Status Type!",
-      },
-      trim: true,
+      enum: ["ACTIVE", "ON_LEAVE", "RETIRED"],
+      default: "ACTIVE",
     },
   },
-  { timestamp: true }
+  { timestamp: true },
 );
 
 // Creating & Exporting Model of Schema Structure

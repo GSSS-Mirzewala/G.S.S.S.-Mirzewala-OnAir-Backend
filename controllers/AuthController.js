@@ -26,10 +26,6 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
     return next(new ServerError("WRONG_PASSWORD", 401));
   }
 
-  if (mongodata.accountStatus !== "ACTIVE") {
-    return next(new ServerError("ACCOUNT_NOT_ACTIVE", 403));
-  }
-
   const NewAuthToken = jwt.sign(
     { id: mongodata._id, userType: mongodata.userType },
     process.env.JWT_SECRET,
@@ -48,7 +44,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   delete User.password;
 
   return res.status(200).json({
-    success: true,
+    isSuccess: true,
     mongodata: User,
   });
 });
@@ -65,7 +61,7 @@ export const handleLogout = async (req, res, next) => {
   );
 
   if (!mongodata) {
-    return next(new ServerError("FAILED_TO_UPDATE_ONLINE", 409));
+    return next(new ServerError("FAILED_TO_UPDATE_STATUS", 409));
   }
 
   res.clearCookie("AuthToken", {
@@ -77,5 +73,5 @@ export const handleLogout = async (req, res, next) => {
 
   return res
     .status(200)
-    .json({ success: true, message: "Logged out successfully" });
+    .json({ isSuccess: true, message: "Logged out successfully" });
 };
