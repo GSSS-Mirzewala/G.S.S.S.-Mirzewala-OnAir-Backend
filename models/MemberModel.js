@@ -34,7 +34,7 @@ const MemberSchema = mongoose.Schema(
       type: String,
       trim: true,
       enum: {
-        values: ["Male", "Female", "Other"],
+        values: ["male", "female", "other"],
         message: "Invalid Gender Choosen!",
       },
     },
@@ -49,6 +49,10 @@ const MemberSchema = mongoose.Schema(
       default:
         "https://res.cloudinary.com/dbelpwtoy/image/upload/f_auto,q_auto/v1767074898/Avatar_si1ngf.svg",
     },
+    avatarPublicId: {
+      type: String,
+      default: "",
+    },
     phone: { type: Number },
     address: { type: String },
     reference: {
@@ -60,7 +64,7 @@ const MemberSchema = mongoose.Schema(
     isOnline: { type: Boolean, default: false },
     lastSeen: { type: Date, default: null },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Virtuals

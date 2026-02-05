@@ -2,7 +2,6 @@
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 
 // Local Modules
@@ -21,9 +20,6 @@ import "./models/profile/AdminModel.js";
 
 // Cron Workers
 import "./crons/UpdateOnline.cron.js";
-
-// Loading Enviornments
-dotenv.config();
 
 // Creating 'Express' App
 const app = express();
