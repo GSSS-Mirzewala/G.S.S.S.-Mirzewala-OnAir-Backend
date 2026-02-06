@@ -53,7 +53,7 @@ app.use("/api/p", PostRouter);
 
 // Error Handler
 app.use((err, req, res, next) => {
-  // console.error("🔥 ERROR:", err); // (for Debugging)
+ console.error("🔥 ERROR:", err); // (for Debugging)
 
   res.status(err.statusCode || 500).json({
     isSuccess: false,
