@@ -9,7 +9,7 @@ export const fetchClass = AsyncErrorHandler(async (req, res) => {
     userType: "Student",
     accountStatus: "ACTIVE",
   })
-    .select("name avatarUrl userType reference")
+    .select("name profilePictureUrl userType reference")
     .populate({
       path: "reference",
       match: { class: className, section: "A" },

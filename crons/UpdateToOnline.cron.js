@@ -14,7 +14,7 @@ cron.schedule("*/1 * * * *", async () => {
         isOnline: true,
         lastSeen: { $lt: CUT_OFF },
       },
-      { isOnline: false }
+      { isOnline: false },
     );
   } catch (error) {
     console.log(error);

@@ -44,12 +44,12 @@ const MemberSchema = mongoose.Schema(
       trim: true,
       lowercase: true,
     },
-    avatarUrl: {
+    profilePictureUrl: {
       type: String,
       default:
         "https://res.cloudinary.com/dbelpwtoy/image/upload/f_auto,q_auto/v1767074898/Avatar_si1ngf.svg",
     },
-    avatarPublicId: {
+    profilePicturePublicId: {
       type: String,
       default: "",
     },

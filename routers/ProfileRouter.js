@@ -2,11 +2,11 @@
 import express from "express";
 
 // Local Modules
-import upload from "../middlewares/UpdateAvatar.js";
+import upload from "../middlewares/UpdateProfilePicture.js";
 import {
   getProfile,
   getMe,
-  updateMyAvatar,
+  updateMyProfilePic,
 } from "../controllers/ProfileController.js";
 import { protect } from "../middlewares/JWT.js";
 
@@ -18,10 +18,10 @@ ProfileRouter.get("/get/p/:id", [protect], getProfile);
 
 // PUT Requests Handler
 ProfileRouter.put(
-  "/put/p/avatar",
+  "/put/p/profilePicture",
   [protect],
-  upload.single("avatar"),
-  updateMyAvatar,
+  upload.single("profilePicture"),
+  updateMyProfilePic,
 );
 
 export default ProfileRouter;
