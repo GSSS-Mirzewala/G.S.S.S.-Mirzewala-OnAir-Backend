@@ -14,7 +14,7 @@ const ProfileRouter = express.Router();
 
 // GET Requests Handler
 ProfileRouter.get("/get/p/me", [protect], getMe);
-ProfileRouter.get("/get/p/:id", [protect], getProfile);
+ProfileRouter.get("/get/p/:id", getProfile);
 
 // PUT Requests Handler
 ProfileRouter.put(

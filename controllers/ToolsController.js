@@ -17,5 +17,5 @@ export const fetchClass = AsyncErrorHandler(async (req, res) => {
     })
     .lean();
 
-  return res.status(200).json({ isSuccess: true, mongodata });
+  return res.status(200).json({ isSuccess: true, data: mongodata });
 });

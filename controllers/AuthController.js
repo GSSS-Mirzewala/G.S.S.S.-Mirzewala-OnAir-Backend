@@ -18,6 +18,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
 
   // Finding User in Database
   let mongodata = await MemberModel.findOne({ miPin }).select("+password");
+
   if (!mongodata) {
     return next(new ServerError("ACCOUNT_NOT_FOUND", 404));
   }
@@ -45,7 +46,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
 
   return res.status(200).json({
     isSuccess: true,
-    mongodata: User,
+    data: User,
   });
 });
 
