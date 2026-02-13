@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 
 // Local Modules
-import MemberModel from "../models/MemberModel.js";
+import memberModel from "../models/member.model.js";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 
@@ -16,7 +16,7 @@ export const checkHealth = (req, res) => {
 export const respondHeatBeat = AsyncErrorsHandler(async (req, res, next) => {
   const decoded = jwt.verify(req.cookies.AuthToken, process.env.JWT_SECRET);
 
-  const mongodata = await MemberModel.findByIdAndUpdate(
+  const mongodata = await memberModel.findByIdAndUpdate(
     { _id: decoded.id },
     {
       isOnline: true,

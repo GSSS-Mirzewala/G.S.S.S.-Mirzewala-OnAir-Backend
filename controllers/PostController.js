@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import { validationResult } from "express-validator";
 
 // Local Modules
-import PostModel from "../models/PostModel.js";
+import postModel from "../models/post.model.js";
 import AsyncServerHandler from "../utils/ServerAsyncErrors.js";
 
 export const create = AsyncServerHandler(async (req, res, next) => {
@@ -18,7 +18,7 @@ export const create = AsyncServerHandler(async (req, res, next) => {
     });
   }
 
-  await PostModel.create({
+  await postModel.create({
     content: req.body.content,
     showTo: req.body.showTo,
     poster: new mongoose.Types.ObjectId(decoded),
@@ -40,13 +40,14 @@ export const fetch = AsyncServerHandler(async (req, res, next) => {
     }
   }
 
-  const mongodata = await PostModel.find({
-    $or: [
-      { showTo: showFor[0] },
-      { showTo: showFor[1] },
-      { showTo: showFor[2] },
-    ],
-  })
+  const mongodata = await postModel
+    .find({
+      $or: [
+        { showTo: showFor[0] },
+        { showTo: showFor[1] },
+        { showTo: showFor[2] },
+      ],
+    })
     .populate("poster")
     .sort({ _id: -1 })
     .limit(10)

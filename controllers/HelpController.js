@@ -1,12 +1,12 @@
 // Local Modules
-import HelpModel from "../models/HelpModel.js";
+import helpModel from "../models/help.model.js";
 import ServerError from "../utils/ServerErrors.js";
 import ServerAsyncError from "../utils/ServerAsyncErrors.js";
 
 export const addToDatabase = ServerAsyncError(async (req, res, next) => {
   const { email, concern } = req.body;
 
-  const pendingRequests = await HelpModel.countDocuments({
+  const pendingRequests = await helpModel.countDocuments({
     status: "PENDING",
     $or: [{ email: email }, { ip: req.ip }],
   });
@@ -16,7 +16,7 @@ export const addToDatabase = ServerAsyncError(async (req, res, next) => {
   }
 
   // If Limits are not Exceeded
-  await HelpModel.create({ email, concern, ip: req.ip });
+  await helpModel.create({ email, concern, ip: req.ip });
 
   res.status(201).json({
     isSuccess: true,

@@ -1,14 +1,15 @@
 // Local Modules
 import AsyncErrorHandler from "../utils/ServerAsyncErrors.js";
-import MemberModel from "../models/MemberModel.js";
+import memberModel from "../models/member.model.js";
 
 export const fetchClass = AsyncErrorHandler(async (req, res) => {
   const { class: className } = req.params;
 
-  const mongodata = await MemberModel.find({
-    userType: "Student",
-    accountStatus: "ACTIVE",
-  })
+  const mongodata = await memberModel
+    .find({
+      userType: "Student",
+      accountStatus: "ACTIVE",
+    })
     .select("name profilePictureUrl userType reference")
     .populate({
       path: "reference",

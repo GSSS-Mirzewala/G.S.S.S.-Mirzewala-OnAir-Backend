@@ -1,9 +1,9 @@
 // Local Modules
 import ServerAsyncError from "../../utils/ServerAsyncErrors.js";
-import UpdatesModel from "../../models/UpdatesModel.js";
+import updatesModel from "../../models/updates.model.js";
 
 export const fetchAllUpdates = ServerAsyncError(async (req, res) => {
-  const mongodata = await UpdatesModel.find({}).lean();
+  const mongodata = await updatesModel.find({}).lean();
   return res.status(200).json({
     isSuccess: true,
     data: mongodata,
@@ -11,7 +11,7 @@ export const fetchAllUpdates = ServerAsyncError(async (req, res) => {
 });
 
 export const fetchLatestUpdate = ServerAsyncError(async (req, res) => {
-  const mongodata = await UpdatesModel.findOne().sort({ createdAt: -1 }).lean();
+  const mongodata = await updatesModel.findOne().sort({ createdAt: -1 }).lean();
   return res.status(200).json({
     isSuccess: true,
     data: mongodata,

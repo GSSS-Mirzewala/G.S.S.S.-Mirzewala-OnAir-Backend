@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import { validationResult } from "express-validator";
 
 // Local Modules
-import MemberModel from "../models/MemberModel.js";
+import memberModel from "../models/member.model.js";
 import ServerError from "../utils/ServerErrors.js";
 import AsyncErrorsHandler from "../utils/ServerAsyncErrors.js";
 
@@ -17,7 +17,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
   const { miPin, password } = req.body;
 
   // Finding User in Database
-  let mongodata = await MemberModel.findOne({ miPin }).select("+password");
+  let mongodata = await memberModel.findOne({ miPin }).select("+password");
 
   if (!mongodata) {
     return next(new ServerError("ACCOUNT_NOT_FOUND", 404));
@@ -53,7 +53,7 @@ export const handleLogin = AsyncErrorsHandler(async (req, res, next) => {
 export const handleLogout = async (req, res, next) => {
   const decoded = jwt.verify(req.cookies.AuthToken, process.env.JWT_SECRET);
 
-  const mongodata = await MemberModel.findByIdAndUpdate(
+  const mongodata = await memberModel.findByIdAndUpdate(
     { _id: decoded.id },
     {
       isOnline: false,

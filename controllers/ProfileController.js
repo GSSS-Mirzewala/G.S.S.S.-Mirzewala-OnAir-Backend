@@ -2,7 +2,7 @@
 import jwt from "jsonwebtoken";
 
 // Local Modules
-import MemberModel from "../models/MemberModel.js";
+import memberModel from "../models/member.model.js";
 import AsyncErrorHandler from "../utils/ServerAsyncErrors.js";
 import ServerError from "../utils/ServerErrors.js";
 import {
@@ -12,7 +12,8 @@ import {
 
 export const getMe = AsyncErrorHandler(async (req, res, next) => {
   const decoded = jwt.decode(req.cookies.AuthToken, process.env.JWT_SECRET);
-  let mongodata = await MemberModel.findById(decoded.id)
+  let mongodata = await memberModel
+    .findById(decoded.id)
     .populate("reference")
     .lean();
 
@@ -28,7 +29,7 @@ export const getMe = AsyncErrorHandler(async (req, res, next) => {
 
 export const getProfile = AsyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
-  const mongodata = await MemberModel.findById(id);
+  const mongodata = await memberModel.findById(id);
 
   if (!mongodata) {
     return next(new ServerError("PROFILE_NOT_FOUND", 404));
@@ -40,7 +41,7 @@ export const getProfile = AsyncErrorHandler(async (req, res, next) => {
 export const updateMyProfilePic = AsyncErrorHandler(async (req, res, next) => {
   const decoded = jwt.decode(req.cookies.AuthToken, process.env.JWT_SECRET);
 
-  const User = await MemberModel.findById(decoded.id);
+  const User = await memberModel.findById(decoded.id);
 
   if (!User) {
     return next(new ServerError("ACCOUNT_NOT_FOUND", 404));
