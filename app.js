@@ -12,7 +12,6 @@ import InternalsRouter from "./routers/InternalsRouter.js";
 import ToolsRouter from "./routers/ToolsRouter.js";
 import ProfileRouter from "./routers/ProfileRouter.js";
 import PostRouter from "./routers/PostRouter.js";
-import MusicRouter from "./routers/music.router.js";
 
 // Models
 import "./models/profile/student.model.js";
@@ -50,7 +49,6 @@ app.use("/api/auth", AuthRouter);
 app.use("/api/help", HelpRouter);
 app.use("/api/t", ToolsRouter);
 app.use("/api/u", ProfileRouter);
-app.use("/api/music", MusicRouter);
 app.use("/api/p", PostRouter);
 
 // Error Handler

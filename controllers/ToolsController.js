@@ -1,6 +1,7 @@
 // Local Modules
 import AsyncErrorHandler from "../utils/ServerAsyncErrors.js";
 import memberModel from "../models/member.model.js";
+import musicModel from "../models/music.model.js";
 
 export const fetchClass = AsyncErrorHandler(async (req, res) => {
   const { class: className } = req.params;
@@ -19,4 +20,13 @@ export const fetchClass = AsyncErrorHandler(async (req, res) => {
     .lean();
 
   return res.status(200).json({ isSuccess: true, data: mongodata });
+});
+
+export const getAllMusic = AsyncErrorHandler(async (req, res, next) => {
+  const mongodata = await musicModel.find({}).lean();
+
+  res.status(200).json({
+    isSuccess: true,
+    data: mongodata,
+  });
 });

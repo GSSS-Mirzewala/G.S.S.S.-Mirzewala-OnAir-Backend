@@ -9,9 +9,8 @@ const MusicSchema = mongoose.Schema(
       enum: ["PRAYER", "NATIONAL_ANTHEM", "MOTIVATIONAL", "OTHER"],
       required: true,
     },
-    publicId: { type: String, required: true },
     audioUrl: { type: String, required: true },
-    duration: { type: Number, required: true },
+    author: { type: String, required: true },
   },
   { timestamps: true },
 );
