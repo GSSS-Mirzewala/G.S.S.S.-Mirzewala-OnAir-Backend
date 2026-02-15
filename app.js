@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-// Local Modules
+// Local Module
 import PublicRouter from "./routers/PublicRouter.js";
 import AuthRouter from "./routers/AuthRouter.js";
 import HelpRouter from "./routers/HelpRouter.js";
