@@ -11,6 +11,6 @@ const ToolsRouter = express.Router();
 ToolsRouter.get("/marker/class/:class", [protect], fetchClass);
 
 // Music Player
-ToolsRouter.get("/music/get/all", [protect], getAllMusic);
+ToolsRouter.get("/music/get/all", getAllMusic);
 
 export default ToolsRouter;
