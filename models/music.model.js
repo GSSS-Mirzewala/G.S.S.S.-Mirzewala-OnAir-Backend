@@ -6,7 +6,7 @@ const MusicSchema = mongoose.Schema(
     title: { type: String, required: true },
     category: {
       type: String,
-      enum: ["PRAYER", "NATIONAL_ANTHEM", "MOTIVATIONAL", "OTHER"],
+      enum: ["Prayer", "Motivational", "Other"],
       required: true,
     },
     audioUrl: { type: String, required: true },

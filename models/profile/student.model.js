@@ -7,11 +7,10 @@ const StudentSchema = mongoose.Schema(
     class: { type: Number },
     section: { type: String, trim: true, default: "A" },
     rollNumber: { type: Number },
-    fatherName: { type: String, trim: true },
-    motherName: { type: String, trim: true },
+    parentName: { type: String, trim: true },
     dateOfAdmission: { type: Date },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Creating & Exporting Model of Schema Structure

@@ -15,7 +15,7 @@ export const fetchClass = AsyncErrorHandler(async (req, res) => {
     .populate({
       path: "reference",
       match: { class: className, section: "A" },
-      select: "fatherName -_id",
+      select: "parentName -_id",
     })
     .lean();
 
