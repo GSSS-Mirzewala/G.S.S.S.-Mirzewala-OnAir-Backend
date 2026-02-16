@@ -5,7 +5,7 @@ import express from "express";
 import {
   checkHealth,
   respondHeatBeat,
-} from "../controllers/InternalsController.js";
+} from "../controllers/internals.controller.js";
 import { protect } from "../middlewares/JWT.js";
 
 const InternalsRouter = express();

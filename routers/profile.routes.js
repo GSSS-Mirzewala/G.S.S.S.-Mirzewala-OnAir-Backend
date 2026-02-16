@@ -7,7 +7,7 @@ import {
   getProfile,
   getMe,
   updateMyProfilePic,
-} from "../controllers/ProfileController.js";
+} from "../controllers/profile.controller.js";
 import { protect } from "../middlewares/JWT.js";
 
 const ProfileRouter = express.Router();

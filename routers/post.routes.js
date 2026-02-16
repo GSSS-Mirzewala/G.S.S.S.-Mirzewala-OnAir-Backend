@@ -2,7 +2,7 @@
 import express from "express";
 
 // Local Modules
-import { create, fetch } from "../controllers/PostController.js";
+import { create, fetch } from "../controllers/post.controller.js";
 import {
   validateContent,
   validateVisibility,

@@ -2,7 +2,7 @@
 import express from "express";
 
 // Local Modules
-import { handleLogin, handleLogout } from "../controllers/AuthController.js";
+import { handleLogin, handleLogout } from "../controllers/auth.controller.js";
 import { redirect, protect } from "../middlewares/JWT.js";
 
 // Validators

@@ -5,13 +5,13 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 // Local Modules
-import PublicRouter from "./routers/PublicRouter.js";
-import AuthRouter from "./routers/AuthRouter.js";
-import HelpRouter from "./routers/HelpRouter.js";
-import InternalsRouter from "./routers/InternalsRouter.js";
-import ToolsRouter from "./routers/ToolsRouter.js";
-import ProfileRouter from "./routers/ProfileRouter.js";
-import PostRouter from "./routers/PostRouter.js";
+import PublicRoutes from "./routers/public.routes.js";
+import AuthRoutes from "./routers/auth.routes.js";
+import HelpRoutes from "./routers/help.routes.js";
+import InternalsRoutes from "./routers/internals.routes.js";
+import ToolsRoutes from "./routers/tools.routes.js";
+import ProfileRoutes from "./routers/profile.routes.js";
+import PostRoutes from "./routers/post.routes.js";
 
 // Models
 import "./models/profile/student.model.js";
@@ -43,13 +43,13 @@ const PORT = process.env.PORT;
 const MONGO_URI = process.env.MONGO_URI;
 
 // Routers
-app.use("/api/public", PublicRouter);
-app.use("/api/i", InternalsRouter);
-app.use("/api/auth", AuthRouter);
-app.use("/api/help", HelpRouter);
-app.use("/api/t", ToolsRouter);
-app.use("/api/u", ProfileRouter);
-app.use("/api/p", PostRouter);
+app.use("/api/public", PublicRoutes);
+app.use("/api/i", InternalsRoutes);
+app.use("/api/auth", AuthRoutes);
+app.use("/api/help", HelpRoutes);
+app.use("/api/t", ToolsRoutes);
+app.use("/api/u", ProfileRoutes);
+app.use("/api/p", PostRoutes);
 
 // Error Handler
 app.use((err, req, res, next) => {

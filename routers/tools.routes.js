@@ -3,7 +3,7 @@ import express from "express";
 
 // Local Modules
 import { protect } from "../middlewares/JWT.js";
-import { fetchClass, getAllMusic } from "../controllers/ToolsController.js";
+import { fetchClass, getAllMusic } from "../controllers/tools.controller.js";
 
 const ToolsRouter = express.Router();
 
@@ -11,6 +11,6 @@ const ToolsRouter = express.Router();
 ToolsRouter.get("/marker/class/:class", [protect], fetchClass);
 
 // Music Player
-ToolsRouter.get("/music/get/all", getAllMusic);
+ToolsRouter.get("/music/get/all", [protect], getAllMusic);
 
 export default ToolsRouter;
