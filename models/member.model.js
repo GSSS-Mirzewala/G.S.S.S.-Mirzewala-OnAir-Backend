@@ -54,7 +54,6 @@ const MemberSchema = mongoose.Schema(
       default: "",
     },
     phone: { type: Number },
-    address: { type: String },
     reference: {
       type: mongoose.Schema.Types.ObjectId,
       refPath: "userType",

@@ -52,7 +52,7 @@ app.use("/api/u", ProfileRoutes);
 app.use("/api/p", PostRoutes);
 
 // Error Handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // console.error("🔥 ERROR:", err); // (for Debugging)
 
   res.status(err.statusCode || 500).json({

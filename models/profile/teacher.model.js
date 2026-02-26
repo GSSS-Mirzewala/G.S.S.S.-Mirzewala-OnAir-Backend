@@ -15,10 +15,8 @@ const TeacherSchema = mongoose.Schema(
     subject: { type: String, trim: true },
     assignedClass: { type: String, trim: true },
     designation: { type: String, trim: true },
-    qualifications: { type: Array, trim: true },
-    dateOfJoining: { type: Date },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Creating & Exporting Model of Schema Structure
