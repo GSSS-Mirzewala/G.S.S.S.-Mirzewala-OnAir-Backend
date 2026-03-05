@@ -9,6 +9,7 @@ const ToolsRouter = express.Router();
 
 // Marker
 ToolsRouter.get("/marker/class/:class", [protect], fetchClass);
+ToolsRouter.post("/marker/create/doc/class/:class", [protect], fetchClass);
 
 // Music Player
 ToolsRouter.get("/music/get/all", [protect], getAllMusic);
